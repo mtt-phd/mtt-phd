@@ -1,5 +1,5 @@
-import numpy as np 
-import pandas as pd
+# import numpy as np 
+# import pandas as pd
 
 """
 Multi-Target Tracking: Probability Hypothesis Density Filter (MTT: PHD)
@@ -80,3 +80,11 @@ class mtt_phd:
 
     def return_findings(): 
         i = 0
+
+
+def main(): 
+    print("this is the main function")
+
+
+if __name__ == "__main__": 
+    main()
