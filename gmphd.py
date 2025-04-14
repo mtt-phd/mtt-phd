@@ -5,7 +5,7 @@
 Multi-Target Tracking: Probability Hypothesis Density Filter (MTT: PHD)
 
 Multi-Target Tracking (MTT): estimation at each timestep of states based on sequence of cluttered sets and noise 
-                                as well as an estimation of the number of targets present
+                                as well as an estimation of the number of targets present. 
 
 Uses collection of targets and measurements as random finite set then applies Probability Hypothesis Density Filter
 
@@ -17,6 +17,17 @@ Implementation with Gaussian: similar to Kalman filter. Uses the Gaussian to pro
 
 Note: 
 - Uses Monte Carlo to generate sequential data to propafate posterior intensity.
+- PHD requires less  copmutation than Multuple target recursion
+
+Assumptions of Linear Gaussian Multiple-Target Model (from paper)
+A1: Each target evolves and generates observations independent of one another
+A2: Clutter is Poisson and independent of target originated measurements 
+A3: Predicted multiple-target RFS governed by p_{k|k-1} in Poission
+A4: Each target follows a linear Gaussian model and the sensor has a linear Gaussian dynamical model and the sensors has a linear Gaussian measurement model
+A5: The survival and detection probabilities are state independent 
+A6: The intensities of the birth and spawn RFS are Gaussian mixtures
+
+
 
 
 Based on the pseudocode here: https://ieeexplore-ieee-org.eres.library.manoa.hawaii.edu/document/1710358
