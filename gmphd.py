@@ -27,8 +27,7 @@ A4: Each target follows a linear Gaussian model and the sensor has a linear Gaus
 A5: The survival and detection probabilities are state independent 
 A6: The intensities of the birth and spawn RFS are Gaussian mixtures
 
-
-
+Proposition of PHD show how the Gaussian components of the posterior intensity are analytically propagated to the next time
 
 Based on the pseudocode here: https://ieeexplore-ieee-org.eres.library.manoa.hawaii.edu/document/1710358
 """
