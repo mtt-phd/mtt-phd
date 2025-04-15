@@ -1,6 +1,3 @@
-# import numpy as np 
-# import pandas as pd
-
 """
 Multi-Target Tracking: Probability Hypothesis Density Filter (MTT: PHD)
 
