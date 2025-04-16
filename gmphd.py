@@ -30,7 +30,6 @@ Based on the pseudocode here: https://ieeexplore-ieee-org.eres.library.manoa.haw
 """
 
 class mtt_phd:
-
     """
     declare all variables use as basis
     """
