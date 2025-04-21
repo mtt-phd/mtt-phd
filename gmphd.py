@@ -1,6 +1,6 @@
-import os 
+# import os 
 
-os.system("bash install_packages.sh")
+# os.system("bash install_packages.sh")
 """
 Multi-Target Tracking: Probability Hypothesis Density Filter (MTT: PHD)
 
