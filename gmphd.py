@@ -1,3 +1,6 @@
+import os 
+
+os.system("bash install_packages.sh")
 """
 Multi-Target Tracking: Probability Hypothesis Density Filter (MTT: PHD)
 
@@ -28,6 +31,7 @@ Proposition of PHD show how the Gaussian components of the posterior intensity a
 
 Based on the pseudocode here: https://ieeexplore-ieee-org.eres.library.manoa.hawaii.edu/document/1710358
 """
+import numpy as np
 
 class mtt_phd:
     """
