@@ -39,7 +39,7 @@ w = weights
 J = num components
 m = position [x, velocity_x, y, velocity_y]
 z = measurements 
-P - covariance
+P = covariance matrix
 """
 
 class mtt_phd:
