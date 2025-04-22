@@ -42,12 +42,20 @@ class mtt_phd:
         self.position = position
         self.birth_conv_matrix = p_cov
         # self.measurement_set = z_k
-        self.num_components = num_components
+        self.n_components = num_components
         self.measurement = measurement
     
     """
     step 1
     prediction for birth targets
+
+    creates possible location and uncertainties of targets based on where 
+    they were previously and how expected to move
+
+    args:
+
+    return: 
+
     """
     def predict_birth(): 
         i = 0
@@ -57,6 +65,9 @@ class mtt_phd:
     """
     step 2
     prediction for existing targets
+
+    creates other targets that have the potential to appear in the scene
+    Note: did not show up in step 1
     """
     def predict_exist():
         i = 0
@@ -64,6 +75,9 @@ class mtt_phd:
     """
     step 3
     construction of PHD update components
+
+    consider and combines all predicted targets overall
+
     """
     def phd_components_update(): 
         i = 0
@@ -71,6 +85,9 @@ class mtt_phd:
     """
     step 4 
     update
+
+    check how the predicted targets compare to the target measurements
+
     """
 
     def update(): 
@@ -79,7 +96,9 @@ class mtt_phd:
     """
     step pruning 
 
-    retrains the best components
+    retrains the best components (e.g, removes inisghnificant components, 
+    merge similar components and limit total components to n_components)
+
     """
     def prune_alg(): 
         i = 0
@@ -87,6 +106,9 @@ class mtt_phd:
     """
     step 5
     output of doing PHD filter
+
+    returns a discrete set of the estimated positiosn of targets at each time step
+
     """
 
     def return_findings(): 
