@@ -37,12 +37,13 @@ class mtt_phd:
     """
     declare all variables use as basis
     """
-    def __init__(self, weights, means, p_cov, target_set):
+    def __init__(self, weights, position, p_cov, num_components, measurement):
         self.birth_weights = weights
-        self.birth_gaussian_means = means
+        self.position = position
         self.birth_conv_matrix = p_cov
         # self.measurement_set = z_k
-        self.birth_target_set = target_set
+        self.num_components = num_components
+        self.measurement = measurement
     
     """
     step 1
@@ -97,5 +98,4 @@ def main():
 
 
 if __name__ == "__main__": 
-    print(np.random.rand())
     main()
