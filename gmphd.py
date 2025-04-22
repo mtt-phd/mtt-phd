@@ -33,6 +33,15 @@ Based on the pseudocode here: https://ieeexplore-ieee-org.eres.library.manoa.haw
 """
 import numpy as np
 
+"""
+defintion of variables relative to paper
+w = weights
+J = num components
+m = position [x, velocity_x, y, velocity_y]
+z = measurements 
+P - covariance
+"""
+
 class mtt_phd:
     """
     declare all variables use as basis
@@ -54,13 +63,15 @@ class mtt_phd:
 
     args:
 
+
     return: 
 
     """
-    def predict_birth(): 
+    def predict_birth(n_components, weights, ): 
         i = 0
         for j in len():
             print()
+
     
     """
     step 2
