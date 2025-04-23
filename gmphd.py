@@ -35,6 +35,7 @@ import numpy as np
 
 """
 defintion of variables relative to paper
+
 w = weights
 J = num components
 m = position [x, velocity_x, y, velocity_y]
@@ -47,7 +48,7 @@ class mtt_phd:
     declare all variables use as basis
     """
     def __init__(self, weights, position, p_cov, num_components, measurement):
-        self.birth_weights = weights
+        self.weights = weights
         self.position = position
         self.birth_conv_matrix = p_cov
         # self.measurement_set = z_k
@@ -63,11 +64,15 @@ class mtt_phd:
 
     args:
 
+    weights 
+    position
+    covariance
+
 
     return: 
-
+    updated weights, position, and covariance
     """
-    def predict_birth(n_components, weights, ): 
+    def predict_birth(n_components, weights, position,  covariance): 
         i = 0
         for j in len():
             print()
@@ -79,8 +84,10 @@ class mtt_phd:
 
     creates other targets that have the potential to appear in the scene
     Note: did not show up in step 1
+
+
     """
-    def predict_exist():
+    def predict_exist(n_components, weights, position):
         i = 0
     
     """
@@ -90,7 +97,7 @@ class mtt_phd:
     consider and combines all predicted targets overall
 
     """
-    def phd_components_update(): 
+    def phd_components_update(n_components, covariance): 
         i = 0
     
     """
@@ -101,7 +108,7 @@ class mtt_phd:
 
     """
 
-    def update(): 
+    def update(n_components, weights, position, covariance): 
          i = 0
     
     """
@@ -111,22 +118,28 @@ class mtt_phd:
     merge similar components and limit total components to n_components)
 
     """
-    def prune_alg(): 
+    def prune_alg(weights, position, covariance, n_components): 
         i = 0
     
     """
     step 5
     output of doing PHD filter
-
+s
     returns a discrete set of the estimated positiosn of targets at each time step
 
     """
 
-    def return_findings(): 
+    def return_findings(weights, position, covariance, components): 
         i = 0
 
 
 def main(): 
+    covariance = np.load("data_in_progress/covariance.npy")
+    print(covariance)
+    measurement = np.load("data_in_progress/measurements.npy")
+    print(measurement)
+    weights = np.load("data_in_progress/weights.npy")
+    print(weights)
     print("this is the main function")
 
 
