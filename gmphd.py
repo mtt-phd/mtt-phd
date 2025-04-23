@@ -52,7 +52,7 @@ class mtt_phd:
         self.position = position
         self.birth_conv_matrix = p_cov
         # self.measurement_set = z_k
-        self.n_components = num_components
+        self.n_component = num_components
         self.measurement = measurement
     
     """
@@ -67,15 +67,16 @@ class mtt_phd:
     weights 
     position
     covariance
+    n_components
 
 
     return: 
     updated weights, position, and covariance
     """
-    def predict_birth(n_components, weights, position,  covariance): 
+    def predict_birth(self): 
         i = 0
-        for j in len():
-            print()
+        for j in range(self.n_component):
+            print(j)
 
     
     """
@@ -85,9 +86,14 @@ class mtt_phd:
     creates other targets that have the potential to appear in the scene
     Note: did not show up in step 1
 
+    args
+    n_components, 
+    weights, 
+    position
+
 
     """
-    def predict_exist(n_components, weights, position):
+    def predict_exist():
         i = 0
     
     """
@@ -96,8 +102,12 @@ class mtt_phd:
 
     consider and combines all predicted targets overall
 
+    args: 
+    n_components, 
+    covariance
+
     """
-    def phd_components_update(n_components, covariance): 
+    def phd_components_update(): 
         i = 0
     
     """
@@ -106,9 +116,15 @@ class mtt_phd:
 
     check how the predicted targets compare to the target measurements
 
+    args
+    n_components, 
+    weights, 
+    position, 
+    covariance
+
     """
 
-    def update(n_components, weights, position, covariance): 
+    def update(): 
          i = 0
     
     """
@@ -117,8 +133,13 @@ class mtt_phd:
     retrains the best components (e.g, removes inisghnificant components, 
     merge similar components and limit total components to n_components)
 
+    weights, 
+    position, 
+    covariance, 
+    n_components
+
     """
-    def prune_alg(weights, position, covariance, n_components): 
+    def prune_alg(): 
         i = 0
     
     """
@@ -127,9 +148,15 @@ class mtt_phd:
 s
     returns a discrete set of the estimated positiosn of targets at each time step
 
+    args
+
+    weights, 
+    position, 
+    covariance, 
+    components
     """
 
-    def return_findings(weights, position, covariance, components): 
+    def return_findings(): 
         i = 0
 
 
@@ -140,6 +167,9 @@ def main():
     print(measurement)
     weights = np.load("data_in_progress/weights.npy")
     print(weights)
+    obj = mtt_phd(weights=3, position=3, p_cov=3, num_components=3, measurement=3)
+    print("I am declared")
+    obj.predict_birth()
     print("this is the main function")
 
 
