@@ -159,11 +159,12 @@ class mtt_phd:
     n_components
 
     """
-    def prune_alg(self): 
-        i = 0
+    def prune_alg(self, weight): 
+        l = 0
         while (self.n_component > 0):
-            print("here")
-
+            l+=1
+            j = max(weight)
+            
     
     """
     step 5
