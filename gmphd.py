@@ -29,7 +29,14 @@ A6: The intensities of the birth and spawn RFS are Gaussian mixtures
 
 Proposition of PHD show how the Gaussian components of the posterior intensity are analytically propagated to the next time
 
-Based on the pseudocode here: https://ieeexplore-ieee-org.eres.library.manoa.hawaii.edu/document/1710358
+Based on the pseudocode here: https://ieeexplore-ieee-org.eres.library.manoa.hawaii.edu/document/171035
+
+Other resources: 
+   Gaussian PHD Filter https://stonesoup.readthedocs.io/en/v0.1b7/auto_tutorials/11_GMPHDTutorial.html
+   Data Association for mulit-target tracking https://stonesoup.readthedocs.io/en/v0.1b9/auto_tutorials/06_DataAssociation-MultiTargetTutorial.html 
+
+   Another example of PHD filter implementeed https://github.com/Agarciafernandez/MTT/blob/master/PHD%20filter/GMCPHD_filter.m
+
 """
 import numpy as np
 
@@ -164,8 +171,7 @@ class mtt_phd:
         while (self.n_component > 0):
             l+=1
             j = max(weight)
-            
-    
+
     """
     step 5
     output of doing PHD filter
