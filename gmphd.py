@@ -51,12 +51,16 @@ class mtt_phd:
     def __init__(self, weights, position, p_cov, num_components, measurement):
         """w"""
         self.weights = weights 
+
         """m"""
         self.position = position
+
         """P"""
         self.birth_conv_matrix = p_cov
+
         """J"""
         self.n_component = num_components
+
         """z"""
         self.measurement = measurement
     
@@ -82,6 +86,10 @@ class mtt_phd:
         i = 0
         for j in range(self.n_component):
             print(j)
+        
+        for j in range(self.n_component):
+            for l in range(self.n_component): 
+                print(l)
 
     
     """
@@ -98,8 +106,11 @@ class mtt_phd:
 
 
     """
-    def predict_exist():
+    def predict_exist(self):
         i = 0
+        for j in range(self.n_components): 
+            print(j)
+
     
     """
     step 3
@@ -112,8 +123,10 @@ class mtt_phd:
     covariance
 
     """
-    def phd_components_update(): 
+    def phd_components_update(self): 
         i = 0
+        for j in range(self.n_component):
+            print(j)
     
     """
     step 4 
@@ -129,8 +142,10 @@ class mtt_phd:
 
     """
 
-    def update(): 
+    def update(self): 
          i = 0
+         for j in range(self.n_component): 
+             print(j)
     
     """
     step pruning 
@@ -144,8 +159,11 @@ class mtt_phd:
     n_components
 
     """
-    def prune_alg(): 
+    def prune_alg(self): 
         i = 0
+        while (self.n_component > 0):
+            print("here")
+
     
     """
     step 5
@@ -161,8 +179,9 @@ s
     components
     """
 
-    def return_findings(): 
+    def return_findings(self, weights, position): 
         i = 0
+        X = []
 
 
 def main(): 
