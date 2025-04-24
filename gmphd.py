@@ -47,12 +47,17 @@ class mtt_phd:
     """
     declare all variables use as basis
     """
+    """                   w          m      P           J              z"""
     def __init__(self, weights, position, p_cov, num_components, measurement):
-        self.weights = weights
+        """w"""
+        self.weights = weights 
+        """m"""
         self.position = position
+        """P"""
         self.birth_conv_matrix = p_cov
-        # self.measurement_set = z_k
+        """J"""
         self.n_component = num_components
+        """z"""
         self.measurement = measurement
     
     """
