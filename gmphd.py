@@ -36,9 +36,9 @@ Other resources:
    Data Association for mulit-target tracking https://stonesoup.readthedocs.io/en/v0.1b9/auto_tutorials/06_DataAssociation-MultiTargetTutorial.html 
 
    Another example of PHD filter implementeed https://github.com/Agarciafernandez/MTT/blob/master/PHD%20filter/GMCPHD_filter.m
-
 """
 import numpy as np
+import pandas as pd
 
 """
 defintion of variables relative to paper
