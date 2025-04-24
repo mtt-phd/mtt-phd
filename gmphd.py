@@ -182,6 +182,11 @@ s
     def return_findings(self, weights, position): 
         i = 0
         X = []
+        for i in range(self.n_components):
+            if weights[i] > 0.5: 
+                for j in range(round(weights[i])):
+                    X_hat = [X, position]
+        return X_hat
 
 
 def main(): 
