@@ -56,22 +56,14 @@ class mtt_phd:
     """
     """                   w          m      P           J              z"""
     def __init__(self, weights, position, p_cov, num_components, measurement):
-        """w"""
-        self.weights = weights 
+        # birth data
+        self.birth_weights = weights # w
+        self.birth_position = position # m
+        self.birth_conv_matrix = p_cov # P
+        self.n_component = num_components # J
+        self.birth_measurement = measurement # z 
 
-        """m"""
-        self.position = position
-
-        """P"""
-        self.birth_conv_matrix = p_cov
-
-        """J"""
-        self.n_component = num_components
-
-        """z"""
-        self.measurement = measurement
-
-
+        # predicted data
         self.predicted_weights = []
         self.predicted_positions = []
         self.predicted_covariance = []
