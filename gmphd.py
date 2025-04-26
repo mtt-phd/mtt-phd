@@ -44,7 +44,7 @@ import pandas as pd
 defintion of variables relative to paper
 
 w = weights
-J = num components
+J = number of gaussian possibilties in model
 m = position [x, velocity_x, y, velocity_y]
 z = measurements 
 P = covariance matrix
@@ -60,8 +60,10 @@ class mtt_phd:
         self.birth_weights = weights # w
         self.birth_position = position # m
         self.birth_conv_matrix = p_cov # P
-        self.n_component = num_components # J
+        self.n_component = num_components # number of targets
         self.birth_measurement = measurement # z 
+
+        # j ==> number of gaussian samples considering
 
         # predicted data
         self.predicted_weights = []
@@ -88,9 +90,17 @@ class mtt_phd:
     updated weights, position, and covariance
     """
     def predict_birth(self): 
+
+        # create the predicted positions
         i = 0
-        for j in range(self.n_component):
-            print(j)
+
+        # creates the predicted data for each birth component
+        for j in range(len(self.birth_weights)):
+            i+=1
+            self.predicted_weights.append(self.birth_weights[i])
+            self.predicted_positions.append(self.birth_position[i])
+            self.predicted_covariance.append(self.birth_conv_matrix[i])
+        
         
         for j in range(self.n_component):
             for l in range(self.n_component): 
