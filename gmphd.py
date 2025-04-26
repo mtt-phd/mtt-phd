@@ -29,7 +29,7 @@ A6: The intensities of the birth and spawn RFS are Gaussian mixtures
 
 Proposition of PHD show how the Gaussian components of the posterior intensity are analytically propagated to the next time
 
-Based on the pseudocode here: https://ieeexplore-ieee-org.eres.library.manoa.hawaii.edu/document/171035
+Based on the pseudocode here: https://ieeexplore-ieee-org.eres.library.manoa.hawaii.edu/document/1710358 
 
 Other resources: 
    Gaussian PHD Filter https://stonesoup.readthedocs.io/en/v0.1b7/auto_tutorials/11_GMPHDTutorial.html
