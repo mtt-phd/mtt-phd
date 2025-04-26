@@ -52,7 +52,7 @@ P = covariance matrix
 
 class mtt_phd:
     """
-    declare all variables use as basis
+    declare all synthetic data
     """
     """                   w          m      P           J              z"""
     def __init__(self, weights, position, p_cov, num_components, measurement):
