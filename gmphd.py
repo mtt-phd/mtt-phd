@@ -70,6 +70,12 @@ class mtt_phd:
 
         """z"""
         self.measurement = measurement
+
+
+        self.predicted_weights = []
+        self.predicted_positions = []
+        self.predicted_covariance = []
+
     
     """
     step 1
