@@ -86,7 +86,11 @@ class mtt_phd:
         self.prob_survival = 0.99 
         self.survival_rate = 0
 
+        # 1 component for gaussian, can expand if doing other tyles of PHD filters
         self.sub_components = 1
+
+        # create the predicted positions
+        self.incrementer = 0
 
     
     """
@@ -110,19 +114,20 @@ class mtt_phd:
     def predict_birth(self): 
 
         # create the predicted positions
-        i = 0
+        # i = 0
 
         # creates the predicted data for each birth component
         for j in range(self.birth_num):
-            i+=1
+            self.incrementer+=1
             self.predicted_weights.append(self.birth_weights[j])
             self.predicted_positions.append(self.birth_position[j])
             self.predicted_covariance.append(self.birth_conv_matrix[j])
         
         # computes the survival points 
         for j in range(self.num_steps): # uses num steps as it represents how many targets expect to generate
-            for l in range(self.sub_components):
+            for l in range(self.sub_components): # loops only once for GM PHD but gives possibility to expand
             # survival weights
+                self.incrementer+=1
                 surviving_weight = self.prob_survival * self.birth_weights[j]
                 self.surviving_weights.append(surviving_weight)
 
@@ -151,8 +156,7 @@ class mtt_phd:
     """
     def predict_exist(self):
         i = 0
-        for j in range(self.n_components): 
-            print(j)
+        # self.
 
     
     """
