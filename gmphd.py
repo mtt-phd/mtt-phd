@@ -105,9 +105,8 @@ class mtt_phd:
             self.predicted_positions.append(self.birth_position[i])
             self.predicted_covariance.append(self.birth_conv_matrix[i])
         
-        
-        for j in range(self.n_component):
-            for l in range(self.n_component): 
+        for j in range(len(self.birth_num)):
+            for l in range(len(self.birth_position)): 
                 print(l)
 
     
