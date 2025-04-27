@@ -56,8 +56,8 @@ class mtt_phd:
     """
     declare all synthetic data
     """
-    """                   w          m      P           J              z               F                         Q """
-    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix):
+    """                   w          m      P           J              z               F                         Q             num steps"""
+    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps):
         # birth data
         self.birth_weights = weights # w
         self.birth_position = position # m
@@ -66,6 +66,7 @@ class mtt_phd:
         self.birth_measurement = measurement # z 
         self.state_transition_matrix = state_transition_matrix
         self.process_noise_matrix = process_noise_matrix
+        self.num_steps = num_steps
 
         # how many births are defined in the model,
         # each birth is considered as a hypothesis about where the target may be
@@ -77,6 +78,15 @@ class mtt_phd:
         self.predicted_weights = []
         self.predicted_positions = []
         self.predicted_covariance = []
+        
+        # surviving data
+        self.surviving_positions = []
+        self.surviving_weights = []
+        self.surviving_covariances = []
+        self.prob_survival = 0.99 
+        self.survival_rate = 0
+
+        self.sub_components = 1
 
     
     """
@@ -103,15 +113,26 @@ class mtt_phd:
         i = 0
 
         # creates the predicted data for each birth component
-        for j in range(len(self.birth_num)):
+        for j in range(self.birth_num):
             i+=1
-            self.predicted_weights.append(self.birth_weights[i])
-            self.predicted_positions.append(self.birth_position[i])
-            self.predicted_covariance.append(self.birth_conv_matrix[i])
+            self.predicted_weights.append(self.birth_weights[j])
+            self.predicted_positions.append(self.birth_position[j])
+            self.predicted_covariance.append(self.birth_conv_matrix[j])
         
-        for j in range(len(self.birth_num)):
-            for l in range(len(self.birth_position)): 
-                print(l)
+        # computes the survival points 
+        for j in range(self.num_steps): # uses num steps as it represents how many targets expect to generate
+            for l in range(self.sub_components):
+            # survival weights
+                surviving_weight = self.prob_survival * self.birth_weights[j]
+                self.surviving_weights.append(surviving_weight)
+
+                # survival position
+                surviving_position = self.state_transition_matrix @ self.birth_position[j]
+                self.surviving_positions.append(surviving_position)
+
+                # survival covariance 
+                surviving_covariance = (self.state_transition_matrix @ self.birth_conv_matrix[j] @ self.state_transition_matrix.T) + self.process_noise_matrix
+                self.surviving_covariances.append(surviving_covariance)
 
     
     """
