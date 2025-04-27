@@ -63,6 +63,10 @@ class mtt_phd:
         self.n_component = num_components # number of targets
         self.birth_measurement = measurement # z 
 
+        # how many births are defined in the model,
+        # each birth is considered as a hypothesis about where the target may be
+        self.birth_num = len(self.birth_position)
+
         # j ==> number of gaussian samples considering
 
         # predicted data
@@ -95,7 +99,7 @@ class mtt_phd:
         i = 0
 
         # creates the predicted data for each birth component
-        for j in range(len(self.birth_weights)):
+        for j in range(len(self.birth_num)):
             i+=1
             self.predicted_weights.append(self.birth_weights[i])
             self.predicted_positions.append(self.birth_position[i])
