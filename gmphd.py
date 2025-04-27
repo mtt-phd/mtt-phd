@@ -48,20 +48,24 @@ J = number of gaussian possibilties in model
 m = position [x, velocity_x, y, velocity_y]
 z = measurements 
 P = covariance matrix
+F = state transition matrix 
+Q = process noise matrix
 """
 
 class mtt_phd:
     """
     declare all synthetic data
     """
-    """                   w          m      P           J              z"""
-    def __init__(self, weights, position, p_cov, num_components, measurement):
+    """                   w          m      P           J              z               F                         Q """
+    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix):
         # birth data
         self.birth_weights = weights # w
         self.birth_position = position # m
         self.birth_conv_matrix = p_cov # P
         self.n_component = num_components # number of targets
         self.birth_measurement = measurement # z 
+        self.state_transition_matrix = state_transition_matrix
+        self.process_noise_matrix = process_noise_matrix
 
         # how many births are defined in the model,
         # each birth is considered as a hypothesis about where the target may be
