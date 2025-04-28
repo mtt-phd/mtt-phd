@@ -123,21 +123,7 @@ class mtt_phd:
             self.predicted_positions.append(self.birth_position[j])
             self.predicted_covariance.append(self.birth_conv_matrix[j])
         
-        # computes the survival points 
-        for j in range(self.num_steps): # uses num steps as it represents how many targets expect to generate
-            for l in range(self.sub_components): # loops only once for GM PHD but gives possibility to expand
-            # survival weights
-                self.incrementer+=1
-                surviving_weight = self.prob_survival * self.birth_weights[j]
-                self.surviving_weights.append(surviving_weight)
-
-                # survival position (addition of d is excluded b/c d = 0; predicting the position and not spawning)
-                surviving_position = self.state_transition_matrix @ self.birth_position[j]
-                self.surviving_positions.append(surviving_position)
-
-                # survival covariance 
-                surviving_covariance = (self.state_transition_matrix @ self.birth_conv_matrix[j] @ self.state_transition_matrix.T) + self.process_noise_matrix
-                self.surviving_covariances.append(surviving_covariance)
+        # excluded the second for loop b/c no spawning
 
     
     """
@@ -155,8 +141,21 @@ class mtt_phd:
 
     """
     def predict_exist(self):
-        i = 0
-        # self.
+         # computes the survival points 
+        for j in range(self.num_steps): # uses num steps as it represents how many targets expect to generate
+            for l in range(self.sub_components): # loops only once for GM PHD but gives possibility to expand
+            # survival weights
+                self.incrementer+=1
+                surviving_weight = self.prob_survival * self.birth_weights[j]
+                self.surviving_weights.append(surviving_weight)
+
+                # survival position (addition of d is excluded b/c d = 0; predicting the position and not spawning)
+                surviving_position = self.state_transition_matrix @ self.birth_position[j]
+                self.surviving_positions.append(surviving_position)
+
+                # survival covariance 
+                surviving_covariance = (self.state_transition_matrix @ self.birth_conv_matrix[j] @ self.state_transition_matrix.T) + self.process_noise_matrix
+                self.surviving_covariances.append(surviving_covariance)
 
     
     """
