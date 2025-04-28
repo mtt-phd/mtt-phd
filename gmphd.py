@@ -82,7 +82,7 @@ class mtt_phd:
         # previous data 
         self.previous_weights = []
         self.previous_positions = []
-        self.previous_covariance = []
+        self.previous_covariances = []
         
         # surviving data
         self.surviving_positions = []
@@ -146,23 +146,24 @@ class mtt_phd:
 
     """
     def predict_exist(self):
+        if len(self.previous_weights) > 0:
          # computes the survival points 
-        for j in range(len(self.predicted_weights)): # uses num steps as it represents how many targets expect to generate
-            for l in range(self.sub_components): # loops only once for GM PHD but gives possibility to expand
-            # survival weights
-                self.incrementer+=1
-                surviving_weight = self.prob_survival * self.predicted_weights[j]
-                self.surviving_weights.append(surviving_weight)
+            for j in range(len(self.previous_weights)): # uses num steps as it represents how many targets expect to generate
+                for l in range(self.sub_components): # loops only once for GM PHD but gives possibility to expand
+                # survival weights
+                    self.incrementer+=1
+                    surviving_weight = self.prob_survival * self.previous_weights[j]
+                    self.surviving_weights.append(surviving_weight)
 
-                # survival position (addition of d is excluded b/c d = 0; predicting the position and not spawning)
-                surviving_position = self.state_transition_matrix @ self.predict_position[j]
-                self.surviving_positions.append(surviving_position)
+                    # survival position (addition of d is excluded b/c d = 0; predicting the position and not spawning)
+                    surviving_position = self.state_transition_matrix @ self.previous_positions[j]
+                    self.surviving_positions.append(surviving_position)
 
-                # survival covariance 
-                surviving_covariance = (self.state_transition_matrix @ self.predict_conv_matrix[j] @ self.state_transition_matrix.T) + self.process_noise_matrix
-                self.surviving_covariances.append(surviving_covariance)
+                    # survival covariance 
+                    surviving_covariance = (self.state_transition_matrix @ self.previous_covariances[j] @ self.state_transition_matrix.T) + self.process_noise_matrix
+                    self.surviving_covariances.append(surviving_covariance)
 
-    
+        
     """
     step 3
     construction of PHD update components
