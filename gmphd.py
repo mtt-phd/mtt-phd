@@ -131,7 +131,7 @@ class mtt_phd:
                 surviving_weight = self.prob_survival * self.birth_weights[j]
                 self.surviving_weights.append(surviving_weight)
 
-                # survival position
+                # survival position (addition of d is excluded b/c d = 0; predicting the position and not spawning)
                 surviving_position = self.state_transition_matrix @ self.birth_position[j]
                 self.surviving_positions.append(surviving_position)
 
