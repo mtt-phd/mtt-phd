@@ -159,7 +159,7 @@ class mtt_phd:
                     surviving_position = self.state_transition_matrix @ self.previous_positions[j]
                     self.surviving_positions.append(surviving_position)
 
-                    # survival covariance 
+                    # survival covariance
                     surviving_covariance = (self.state_transition_matrix @ self.previous_covariances[j] @ self.state_transition_matrix.T) + self.process_noise_matrix
                     self.surviving_covariances.append(surviving_covariance)
 
