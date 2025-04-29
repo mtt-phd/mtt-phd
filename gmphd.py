@@ -1,3 +1,4 @@
+# imports packages 
 # import os 
 
 # os.system("bash install_packages.sh")
@@ -147,7 +148,9 @@ class mtt_phd:
 
 
     """
+
     def predict_exist(self):
+        # similar algorithm to spawning in step 1 but difference is looking at previous weight
         if len(self.previous_weights) > 0:
          # computes the survival points 
             for j in range(len(self.previous_weights)): # uses num steps as it represents how many targets expect to generate
@@ -157,7 +160,7 @@ class mtt_phd:
                     surviving_weight = self.prob_survival * self.previous_weights[j]
                     self.surviving_weights.append(surviving_weight)
 
-                    # survival position (addition of d is excluded b/c d = 0; predicting the position and not spawning)
+                    # survival position (addition of d is excluded b/c d = 0 (if used in step 1); predicting the position and not spawning)
                     surviving_position = self.state_transition_matrix @ self.previous_positions[j]
                     self.surviving_positions.append(surviving_position)
 
