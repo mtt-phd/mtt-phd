@@ -162,6 +162,7 @@ class mtt_phd:
                     # survival covariance
                     surviving_covariance = (self.state_transition_matrix @ self.previous_covariances[j] @ self.state_transition_matrix.T) + self.process_noise_matrix
                     self.surviving_covariances.append(surviving_covariance)
+            self.birth_num = self.incrementer
 
         
     """
