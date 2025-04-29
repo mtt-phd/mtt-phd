@@ -130,7 +130,7 @@ class mtt_phd:
         
         # excluded the second for loop b/c no spawning 
             # e.g, where spawning appropriate = if randomly have things coming into play (e.g., missle launches from boats)
-            # e.g. without spawning people walking on street
+            # e.g. without spawning == people walking on street
 
     
     """
