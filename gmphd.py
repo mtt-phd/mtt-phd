@@ -173,7 +173,9 @@ class mtt_phd:
     Gaussian likelihood -- helper function to step 3
     """
     def gaussian_likelihood():
+
         return 1
+    
     """
     step 3
     construction of PHD update components
@@ -181,12 +183,21 @@ class mtt_phd:
     construct an updated Gaussian components using kalman filter
     computes updated weight based on how closely matches the measurement
 
+    Notes: 
+        V^(j)_k|k-1 = H_k m^j_k|(k-1) <-- caculation of predicted measurements
+        S^(j)_k = R_k + H^j_k|k-1 P^j_k|k-1 H^T_k <-- innovation covariance
+        K^j_k = P^j_k|k-1 H^T_k[S^j_k]^-1 <-- kalman gain
+        P^(j)_k|k = Q_k-1 + F_k-1 P^j_k-1 F^T_k-1 <-- posterior covariance
+
+
+
     args: 
     n_components, 
     covariance
 
     """
     def phd_components_update(self): 
+
         i = 0
         for j in range(self.n_component):
             print(j)
