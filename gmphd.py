@@ -172,6 +172,7 @@ class mtt_phd:
     construction of PHD update components
 
     construct an updated Gaussian components using kalman filter
+    computes updated weight based on how closely matches the measurement
 
     args: 
     n_components, 
