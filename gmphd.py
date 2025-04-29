@@ -168,7 +168,7 @@ class mtt_phd:
     step 3
     construction of PHD update components
 
-    consider and combines all predicted targets overall
+    construct an updated Gaussian components using kalman filter
 
     args: 
     n_components, 
