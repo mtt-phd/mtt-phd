@@ -169,7 +169,11 @@ class mtt_phd:
                     self.surviving_covariances.append(surviving_covariance)
             self.total_num = self.incrementer
 
-        
+    """
+    Gaussian likelihood -- helper function to step 3
+    """
+    def gaussian_likelihood():
+        return 1
     """
     step 3
     construction of PHD update components
