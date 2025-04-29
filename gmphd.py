@@ -70,7 +70,7 @@ class mtt_phd:
 
         # how many births are defined in the model,
         # each birth is considered as a hypothesis about where the target may be
-        self.birth_num = len(self.birth_position)
+        self.total_num = len(self.birth_position)
 
         # j ==> number of gaussian samples considering
 
@@ -122,13 +122,15 @@ class mtt_phd:
         # i = 0
 
         # creates the predicted data for each birth component
-        for j in range(self.birth_num):
+        for j in range(self.total_num):
             self.incrementer+=1
             self.predicted_weights.append(self.birth_weights[j])
             self.predicted_positions.append(self.birth_position[j])
             self.predicted_covariance.append(self.birth_conv_matrix[j])
         
-        # excluded the second for loop b/c no spawning
+        # excluded the second for loop b/c no spawning 
+            # e.g, where spawning appropriate = if randomly have things coming into play (e.g., missle launches from boats)
+            # e.g. without spawning people walking on street
 
     
     """
@@ -162,7 +164,7 @@ class mtt_phd:
                     # survival covariance
                     surviving_covariance = (self.state_transition_matrix @ self.previous_covariances[j] @ self.state_transition_matrix.T) + self.process_noise_matrix
                     self.surviving_covariances.append(surviving_covariance)
-            self.birth_num = self.incrementer
+            self.total_num = self.incrementer
 
         
     """
@@ -180,6 +182,7 @@ class mtt_phd:
         i = 0
         for j in range(self.n_component):
             print(j)
+
     
     """
     step 4 
