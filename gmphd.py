@@ -68,17 +68,19 @@ class mtt_phd:
     H = measurement_matrix
     R = measurement_noise_covariance
     """
-    """                   w          m      P           J              z               F                         Q             num steps"""
-    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps):
+    """                   w          m      P           J              z               F                         Q             num steps      H            R"""
+    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise):
         # birth data
         self.birth_weights = weights # w
         self.birth_position = position # m
         self.birth_conv_matrix = p_cov # P
         self.n_component = num_components # number of targets
         self.birth_measurement = measurement # z 
-        self.state_transition_matrix = state_transition_matrix
+        self.state_transition_matrix = state_transition_matrix 
         self.process_noise_matrix = process_noise_matrix
         self.num_steps = num_steps
+        self.measurement_matrix = measurement_matrix
+        self.measurement_noise_covariance = measurement_noise 
 
         # how many births are defined in the model,
         # each birth is considered as a hypothesis about where the target may be
