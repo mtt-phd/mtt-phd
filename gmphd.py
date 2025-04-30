@@ -151,11 +151,12 @@ class mtt_phd:
 
     def predict_exist(self):
         # similar algorithm to spawning in step 1 but difference is looking at previous weight
+
         if len(self.previous_weights) > 0:
          # computes the survival points 
             for j in range(len(self.previous_weights)): # uses num steps as it represents how many targets expect to generate
                 for l in range(self.sub_components): # loops only once for GM PHD but gives possibility to expand
-                # survival weights
+                    # survival weights
                     self.incrementer+=1
                     surviving_weight = self.prob_survival * self.previous_weights[j]
                     self.surviving_weights.append(surviving_weight)
@@ -189,17 +190,18 @@ class mtt_phd:
         K^j_k = P^j_k|k-1 H^T_k[S^j_k]^-1 <-- kalman gain
         P^(j)_k|k = Q_k-1 + F_k-1 P^j_k-1 F^T_k-1 <-- posterior covariance
 
-
-
     args: 
     n_components, 
     covariance
 
     """
     def phd_components_update(self): 
+        self.predicted_calc_measurement = []
+        self.innovation_covariance = []
+        self.kalman_gain = []
+        self.posterior_covariance = [] # used in step 4
 
-        i = 0
-        for j in range(self.n_component):
+        for j in range(len(self.surviving_weights)):
             print(j)
 
     
