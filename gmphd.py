@@ -245,6 +245,24 @@ class mtt_phd:
     position, 
     covariance
 
+    PSEUDO Code: 
+        for j in J_k|k-1
+            w^(j)_k = (1 - P_D,k) w^(j)_k|k-1 
+            m^(j)_k = m^(j)_k|k-1
+            P^(j)_k = P^(j)_k|k-1
+        l:=0
+        for each z in Z_k 
+            l+=1
+            for j in J_k|k-1
+                w_k^(l J_k|k-1 + j) = p_D,k w^(j)_k|k-1 N(z; n^(j)_k|k-1, S^(j)_k)
+                m_k^(l J_k|k-1 + j) = m^j_k|k-1 + K^(j)_k (z - n^(j)_k|k-1)
+                P_k^(l J_k|k-1 + j) = P^(j)_k|k
+            
+            w_k^(l J_k|k-1 +j) := w_k^(l J_k|k-1 + j) / ( K_k(z) + sigma w_k^(l J_k|k-1 +i) for j in J_k|k-1
+        J = l (J_k|k-1) + J_k|k-1
+
+        output: {w^(i)_k, m^(i)_k, P^(i)_k}
+
     """
 
     def update(self): 
