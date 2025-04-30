@@ -56,6 +56,17 @@ Q = process noise matrix
 class mtt_phd:
     """
     declare all synthetic data
+    weights = birth weights (gt)
+    position = birth positions (gt)
+    p_cov = covariance (gt)
+    num_components = number of lines trying to gauge 
+    measurement = birth measurement 
+
+    F = state_transition_matrix 
+    Q = process_noise_matrix = Q 
+    num_steps = total number of points trying to predict per component (should be the same for each??? (need to double check))
+    H = measurement_matrix
+    R = measurement_noise_covariance
     """
     """                   w          m      P           J              z               F                         Q             num steps"""
     def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps):
