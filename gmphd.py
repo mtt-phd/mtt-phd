@@ -249,8 +249,18 @@ class mtt_phd:
 
     def update(self): 
          i = 0
+         # adds in missing detections 
          for j in range(self.n_component): 
              print(j)
+
+             
+         for z in range(self.n_component):
+            print(z)
+            for j in (self.n_component): 
+                print(j)
+
+        
+        
     
     """
     step pruning 
