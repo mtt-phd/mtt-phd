@@ -196,13 +196,28 @@ class mtt_phd:
 
     """
     def phd_components_update(self): 
+        # declare variables to reference in later steps
         self.predicted_calc_measurement = []
         self.innovation_covariance = []
         self.kalman_gain = []
         self.posterior_covariance = [] # used in step 4
 
+        # iterate through the surviving points
         for j in range(len(self.surviving_weights)):
-            print(j)
+            position_pred = self.surviving_positions[j]
+            covariance_predicted = self.surviving_covariances[j]
+            
+            # calculate the measurement and the kalman prediction
+            measurement_predicted = self.measurement_matrix @ position_pred
+            innovation_covariance_pred = self.measurement_matrix @ covariance_predicted @ self.measurement_matrix.T + self.measurement_noise_covariance
+            kalman_pred = covariance_predicted @ self.measurement_matrix.T @ np.linearalg.inv(innovation_covariance_pred)
+            posterior_covariance_pred = (np.eye(len(position_pred)) - kalman_pred @ self.measurement_matrix) @ covariance_predicted
+
+            # save variables for future use
+            self.predicted_calc_measurement.append(measurement_predicted)
+            self.innovation_covariance.append(innovation_covariance_pred)
+            self.kalman_gain.append(kalman_pred)
+            self.posterior_covariance.append(posterior_covariance_pred)
 
     
     """
@@ -245,7 +260,7 @@ class mtt_phd:
     """
     step 5
     output of doing PHD filter
-s
+
     returns a discrete set of the estimated positiosn of targets at each time step
 
     args
