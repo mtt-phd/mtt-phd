@@ -311,6 +311,12 @@ class mtt_phd:
             sum_surviving_rate_weights = sum(surviing_rate_weights)
             kappa = self.clutter_intensity + self.detection_probability + sum_surviving_rate_weights
 
+            # update each predicted component
+            for j in range(len(self.surviving_weights)):
+                print(j)
+
+
+
             
 
         
