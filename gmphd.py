@@ -233,14 +233,15 @@ class mtt_phd:
 
     args: 
         residual => actual_measurement - predicted measurement
-    
     """
-    def gausian_helper_function(self, residual):
-
-        # S
-        self.innovation_covariance 
-
-        return 0
+    def gausian_likelihood(self, residual):
+        len_residual = len(residual)
+        det_innovation = np.linalg.det(self.innovation_covariance)
+        if det_innovation <= 0: 
+            det_innovation = 1e-10
+        norm_constant = 1.0/ (np.power(2 * np.pi, len_residual/2) * np.sqrt(det_innovation))
+        exponent = -0.5 * residual.T @ np.linalg.inv(self.innovation_covariance) @ residual
+        return norm_constant * np.exp(exponent) 
     
     """
     step 4 
