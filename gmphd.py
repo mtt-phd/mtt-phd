@@ -272,6 +272,7 @@ class mtt_phd:
          i = 0
          # adds in missing detections 
          for j in range(len(self.surviving_weights)): 
+             weights_missed = (1 - self.detection_probability) * self.surviving_weights[j]
 
         
          for z in range(self.n_component):
