@@ -68,8 +68,8 @@ class mtt_phd:
     H = measurement_matrix
     R = measurement_noise_covariance
     """
-    """                   w          m      P           J              z               F                         Q             num steps      H            R"""
-    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise):
+    """                   w          m      P           J              z               F                         Q             num steps      H            R                   det_prob"""
+    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability):
         # birth data
         self.birth_weights = weights # w
         self.birth_position = position # m
@@ -105,6 +105,7 @@ class mtt_phd:
         self.prob_survival = 0.99 
         self.survival_rate = 0
 
+        self.detection_probability = detection_probability
         # 1 component for gaussian, can expand if doing other tyles of PHD filters
         self.sub_components = 1
 
