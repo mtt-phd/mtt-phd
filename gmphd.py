@@ -279,6 +279,9 @@ class mtt_phd:
                 l+=1
                 residual = z - self.predicted_calc_measurement[l]
     
+    """
+    Gaussian helper function to get the normals
+    """
     def gausian_helper_function(): 
         return 0
 
