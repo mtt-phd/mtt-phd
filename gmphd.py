@@ -225,7 +225,22 @@ class mtt_phd:
             self.innovation_covariance.append(innovation_covariance_pred)
             self.kalman_gain.append(kalman_pred)
             self.posterior_covariance.append(posterior_covariance_pred)
+        
+    """
+    Gaussian helper function to get the normals for step 4
 
+    Determines how well the filter makes its predictions 
+
+    args: 
+        residual => actual_measurement - predicted measurement
+    
+    """
+    def gausian_helper_function(self, residual):
+
+        # S
+        self.innovation_covariance 
+
+        return 0
     
     """
     step 4 
