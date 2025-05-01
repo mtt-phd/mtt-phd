@@ -307,7 +307,9 @@ class mtt_phd:
             likelihood = likelihood[j]
 
             # accounting for true targets and false targets that exist in the clutter
-            k = 0
+            surviing_rate_weights = []
+            sum_surviving_rate_weights = sum(surviing_rate_weights)
+            kappa = self.clutter_intensity + self.detection_probability + sum_surviving_rate_weights
 
 
         
