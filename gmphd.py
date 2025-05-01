@@ -306,6 +306,9 @@ class mtt_phd:
 
             likelihood = likelihood[j]
 
+            # accounting for true targets and false targets that exist in the clutter
+            k = 0
+
 
         
     
