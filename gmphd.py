@@ -289,16 +289,21 @@ class mtt_phd:
         # measurement update --> looks at the intial measurements
          for z in self.birth_measurement:
             l = 0
-            likelihood = []
+            likelihoods = []
+
+            # computed normalization
             for j in range(len(self.surviving_weights)): 
                 l+=1
-                residual = z - self.predicted_calc_measurement[l]
-    
-    """
-    Gaussian helper function to get the normals
-    """
-    def gausian_helper_function(): 
-        return 0
+                residual = z - self.predicted_calc_measurement[j]
+                K = self.kalman_gain[j]
+                updated_covariances = self.updated_covariances[j]
+                likelihood = self.guassian_likelihood(residual, updated_covariances)
+                likelihoods.append(likelihood)
+
+
+
+                likelihood = likelihood[j]
+
 
         
     
