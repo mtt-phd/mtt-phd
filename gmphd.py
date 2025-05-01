@@ -268,11 +268,14 @@ class mtt_phd:
     def update(self): 
          updated_weights = []
          updated_positions = []
-         updated_covariance = []
+         updated_covariances = []
          i = 0
          # adds in missing detections 
          for j in range(len(self.surviving_weights)): 
              weights_missed = (1 - self.detection_probability) * self.surviving_weights[j]
+             updated_weights.append(weights_missed)
+             updated_positions.append(self.surviving_positions[j])
+             updated_covariances.append(self.surviving_covariances[j])
 
         
          for z in range(self.n_component):
