@@ -280,8 +280,10 @@ class mtt_phd:
          l = 0
         # measurement update
          for z in range(len(self.surviving_weights)):
-            print(z)
+            l = 0
+            likelihood = []
             for j in (self.n_component): 
+                l+=1
                 print(j)
         
     
