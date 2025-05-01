@@ -278,8 +278,8 @@ class mtt_phd:
              updated_covariances.append(self.surviving_covariances[j])
          
          l = 0
-        # measurement update
-         for z in self.predicted_calc_measurement:
+        # measurement update --> looks at the intial measurements
+         for z in self.birth_measurement:
             l = 0
             likelihood = []
             for j in (self.n_component): 
