@@ -183,13 +183,6 @@ class mtt_phd:
                     surviving_covariance = (self.state_transition_matrix @ self.previous_covariances[j] @ self.state_transition_matrix.T) + self.process_noise_matrix
                     self.surviving_covariances.append(surviving_covariance)
             self.total_num = self.incrementer
-
-    """
-    Gaussian likelihood -- helper function to step 3
-    """
-    def gaussian_likelihood():
-
-        return 1
     
     """
     step 3
@@ -284,7 +277,11 @@ class mtt_phd:
             likelihood = []
             for j in range(len(self.surviving_weights)): 
                 l+=1
-                print(j)
+                residual = z - self.predicted_calc_measurement[l]
+    
+    def gausian_helper_function(): 
+        return 0
+
         
     
     """
