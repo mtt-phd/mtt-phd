@@ -266,6 +266,9 @@ class mtt_phd:
 
     """
     def update(self): 
+         updated_weights = []
+         updated_positions = []
+         updated_covariance = []
          i = 0
          # adds in missing detections 
          for j in range(self.n_component): 
