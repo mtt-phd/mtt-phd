@@ -282,7 +282,7 @@ class mtt_phd:
          for z in self.birth_measurement:
             l = 0
             likelihood = []
-            for j in (self.n_component): 
+            for j in range(len(self.surviving_weights)): 
                 l+=1
                 print(j)
         
