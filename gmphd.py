@@ -237,7 +237,7 @@ class mtt_phd:
     step 4 
     update
 
-    check how the predicted targets compare to the target measurements
+    updates current measuremnts, considers missed detections and measurement updates
 
     args
     n_components, 
@@ -264,20 +264,17 @@ class mtt_phd:
         output: {w^(i)_k, m^(i)_k, P^(i)_k}
 
     """
-
     def update(self): 
          i = 0
          # adds in missing detections 
          for j in range(self.n_component): 
              print(j)
 
-             
+        
          for z in range(self.n_component):
             print(z)
             for j in (self.n_component): 
                 print(j)
-
-        
         
     
     """
