@@ -271,8 +271,7 @@ class mtt_phd:
          updated_covariance = []
          i = 0
          # adds in missing detections 
-         for j in range(self.n_component): 
-             print(j)
+         for j in range(len(self.surviving_weights)): 
 
         
          for z in range(self.n_component):
