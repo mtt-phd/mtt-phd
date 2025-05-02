@@ -232,7 +232,6 @@ class mtt_phd:
     """
     Gaussian helper function to get the normals for step 4
 
-    Determines how well the filter makes its predictions 
 
     args: 
         residual => actual_measurement - predicted measurement
@@ -298,6 +297,7 @@ class mtt_phd:
             # computed normalization
             for j in range(len(self.surviving_weights)): 
                 l+=1
+                # determines difference between actual measurement and calculated measurement
                 residual = z - self.predicted_calc_measurement[j]
                 updated_covariances = self.updated_covariances[j]
 
