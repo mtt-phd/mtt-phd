@@ -320,20 +320,18 @@ class mtt_phd:
     """
     step pruning 
 
-    retrains the best components (e.g, removes inisghnificant components, 
-    merge similar components and limit total components to n_components)
+    retrains the best estimates of the target (e.g, removes inisghnificant positions, 
+    merge similar positions and limit total points to steps)
+
     """
-    def prune_alg(self, weight): 
+    def prune_alg(self): 
         l = 0
-        while (self.n_component > 0):
-            l+=1
-            j = max(weight)
 
     """
     step 5
     output of doing PHD filter
 
-    returns a discrete set of the estimated positiosn of targets at each time step
+    returns a discrete set of the estimated positions of targets at each time step
     """
 
     def return_findings(self): 
