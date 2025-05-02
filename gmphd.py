@@ -300,6 +300,7 @@ class mtt_phd:
                 l+=1
                 residual = z - self.predicted_calc_measurement[j]
                 updated_covariances = self.updated_covariances[j]
+
                 likelihood = self.guassian_likelihood(residual, updated_covariances)
                 likelihoods.append(likelihood)
 
@@ -317,6 +318,14 @@ class mtt_phd:
                 covariance_updated = self.innovation_covariance[j]
 
                 likelihood = likelihoods[j]
+
+                """KEY LINE OF ALGORITHM:
+                    Bayes rule for updating the weight of gaussian component given measurement
+                    detection probability: probability that a true target is detected
+                    surviving weights: prior weight of Gaussian component before considering measurement
+                    likelihood: likelihood measurement is true
+                    kappa: normalization term --> acconunts for all possible explanations (clutter + contributions from all targets)
+                    """
                 weight = (self.detection_probability * self.surviving_weights[j]*likelihood) / kappa
 
                 updated_weights.append(weight)
