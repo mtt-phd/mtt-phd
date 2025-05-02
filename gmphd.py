@@ -51,6 +51,7 @@ z = measurements
 P = covariance matrix
 F = state transition matrix 
 Q = process noise matrix
+H = measurement matrix
 """
 
 class mtt_phd:
@@ -216,7 +217,7 @@ class mtt_phd:
             position_pred = self.surviving_positions[j]
             covariance_predicted = self.surviving_covariances[j]
             
-            # calculate the measurement and the kalman prediction
+            # calculate the measurement and the Kalman prediction
             measurement_predicted = self.measurement_matrix @ position_pred
             innovation_covariance_pred = self.measurement_matrix @ covariance_predicted @ self.measurement_matrix.T + self.measurement_noise_covariance
             kalman_pred = covariance_predicted @ self.measurement_matrix.T @ np.linearalg.inv(innovation_covariance_pred)
