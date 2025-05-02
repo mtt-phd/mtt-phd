@@ -304,8 +304,6 @@ class mtt_phd:
                 likelihoods.append(likelihood)
 
 
-            likelihood = likelihood[j]
-
             # accounting for true targets and false targets that exist in the clutter
             surviing_rate_weights = [self.survival_rate[w] * likelihood[w] for w in range(len(surviing_rate_weights))]
             sum_surviving_rate_weights = sum(surviing_rate_weights)
@@ -313,7 +311,17 @@ class mtt_phd:
 
             # update each predicted component
             for j in range(len(self.surviving_weights)):
-                print(j)
+                residual = z - self.predicted_calc_measurement[j]
+                kalman = self.kalman_gain[j]
+                covariance_updated = self.surviving_positions[j] + kalman @ residual
+                position_updated = self.innovation_covariance[j]
+
+                likelihood = likelihoods[j]
+                weight = (self.detection_probability * self.surviving_weights[j]*likelihood) / kappa
+
+                updated_weights.append(weight)
+                updated_positions.append(position_updated)
+                updated_covariances.append(covariance_updated)
 
 
 
