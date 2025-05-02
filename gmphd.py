@@ -323,7 +323,7 @@ class mtt_phd:
     retrains the best estimates of the target (e.g, removes inisghnificant positions, 
     merge similar positions and limit total points to steps)
 
-    truncation threshold: 
+    truncation threshold: determines whether weight is reasonable, (e.g. w > T keep)
     merging threshold: determines how similar predicted targets/components need to be for merging
         Based on the Mahalanobis distance (measures distances between points - including correlated points for multiple variables): 
                 Mahalanobis distance = d(i,j) = sqrt((x_b_vector - x_a_vector)^T C^-1 (x_b_vector - x_a_vector))^0.5
@@ -339,6 +339,8 @@ class mtt_phd:
         mergining_threshold = 0
         truncation_threshold = 0
         maximum_gaussians = self.num_steps
+
+
 
         while(True): 
             print(0)
