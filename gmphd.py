@@ -232,6 +232,14 @@ class mtt_phd:
     """
     Gaussian helper function to get the normals for step 4
 
+    Determines how well the filter makes its predictions
+        e.g., if close then low uncertainty, likelihood = high 
+        e.g, far away, likelihood = low
+
+    Equation: N(z; n^(j)_k|k-1, S^(j)_k) 
+                z = actual measurement
+                n = predicted measurement
+                S = innovation matrix
 
     args: 
         residual => actual_measurement - predicted measurement
