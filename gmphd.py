@@ -322,7 +322,7 @@ class mtt_phd:
     step pruning 
 
     retrains the best components (e.g, removes inisghnificant components, 
-    merge similar components and limit total components to n_components)
+    merge similar components and limit total to target)
     """
     def prune_alg(self, weight): 
         l = 0
