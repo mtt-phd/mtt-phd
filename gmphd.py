@@ -51,6 +51,7 @@ z = measurements
 P = covariance matrix
 F = state transition matrix 
 Q = process noise matrix
+H = measurement matrix
 """
 
 class mtt_phd:
@@ -68,8 +69,8 @@ class mtt_phd:
     H = measurement_matrix
     R = measurement_noise_covariance
     """
-    """                   w          m      P           J              z               F                         Q             num steps      H            R                   det_prob"""
-    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability):
+    """                   w          m      P           J              z               F                         Q             num steps      H            R                   det_prob              clutter_rate"""
+    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability, clutter_intensity):
         # birth data
         self.birth_weights = weights # w
         self.birth_position = position # m
@@ -106,6 +107,8 @@ class mtt_phd:
         self.survival_rate = 0
 
         self.detection_probability = detection_probability
+        self.clutter_intensity = clutter_intensity
+
         # 1 component for gaussian, can expand if doing other tyles of PHD filters
         self.sub_components = 1
 
@@ -214,7 +217,7 @@ class mtt_phd:
             position_pred = self.surviving_positions[j]
             covariance_predicted = self.surviving_covariances[j]
             
-            # calculate the measurement and the kalman prediction
+            # calculate the measurement and the Kalman prediction
             measurement_predicted = self.measurement_matrix @ position_pred
             innovation_covariance_pred = self.measurement_matrix @ covariance_predicted @ self.measurement_matrix.T + self.measurement_noise_covariance
             kalman_pred = covariance_predicted @ self.measurement_matrix.T @ np.linearalg.inv(innovation_covariance_pred)
@@ -233,14 +236,15 @@ class mtt_phd:
 
     args: 
         residual => actual_measurement - predicted measurement
-    
     """
-    def gausian_helper_function(self, residual):
-
-        # S
-        self.innovation_covariance 
-
-        return 0
+    def gausian_likelihood(self, residual):
+        len_residual = len(residual)
+        det_innovation = np.linalg.det(self.innovation_covariance)
+        if det_innovation <= 0: 
+            det_innovation = 1e-10
+        norm_constant = 1.0/ (np.power(2 * np.pi, len_residual/2) * np.sqrt(det_innovation))
+        exponent = -0.5 * residual.T @ np.linalg.inv(self.innovation_covariance) @ residual
+        return norm_constant * np.exp(exponent) 
     
     """
     step 4 
@@ -301,9 +305,28 @@ class mtt_phd:
                 likelihoods.append(likelihood)
 
 
+            # accounting for true targets and false targets that exist in the clutter
+            surviing_rate_weights = [self.survival_rate[w] * likelihood[w] for w in range(len(surviing_rate_weights))]
+            sum_surviving_rate_weights = sum(surviing_rate_weights)
+            kappa = self.clutter_intensity + self.detection_probability + sum_surviving_rate_weights
 
-                likelihood = likelihood[j]
+            # update each predicted component
+            for j in range(len(self.surviving_weights)):
+                residual = z - self.predicted_calc_measurement[j]
+                kalman = self.kalman_gain[j]
+                covariance_updated = self.surviving_positions[j] + kalman @ residual
+                position_updated = self.innovation_covariance[j]
 
+                likelihood = likelihoods[j]
+                weight = (self.detection_probability * self.surviving_weights[j]*likelihood) / kappa
+
+                updated_weights.append(weight)
+                updated_positions.append(position_updated)
+                updated_covariances.append(covariance_updated)
+
+
+
+            
 
         
     
