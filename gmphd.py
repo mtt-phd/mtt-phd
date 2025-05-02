@@ -62,6 +62,7 @@ class mtt_phd:
     p_cov = covariance (gt)
     num_components = number of lines trying to gauge 
     measurement = birth measurement 
+        note: measurement ==> what the sensor detects, could be the target or a false positive/ noise/ clutter
 
     F = state_transition_matrix 
     Q = process_noise_matrix = Q 
