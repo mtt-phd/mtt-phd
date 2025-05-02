@@ -309,6 +309,7 @@ class mtt_phd:
                 residual = z - self.predicted_calc_measurement[j]
                 updated_covariances = self.updated_covariances[j]
 
+                # evaluates if it is part of target
                 likelihood = self.guassian_likelihood(residual, updated_covariances)
                 likelihoods.append(likelihood)
 
