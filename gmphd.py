@@ -244,7 +244,7 @@ class mtt_phd:
     args: 
         residual => actual_measurement - predicted measurement
     """
-    def gaussian_likelihood(self, residual,updated_covariance):
+    def gaussian_likelihood(self, residual, updated_covariance):
         len_residual = len(residual)
         det_innovation = np.linalg.det(updated_covariance)
         if det_innovation <= 0: 
@@ -333,9 +333,9 @@ class mtt_phd:
                     detection probability: probability that a true target is detected
                     surviving weights: prior weight of Gaussian component before considering measurement
                     likelihood: likelihood measurement is true
-                    kappa: normalization term --> acconunts for all possible explanations (clutter + contributions from all targets)
+                    kappa: normalization term --> accounts for all possible explanations (clutter + contributions from all targets)
                 """
-                weight = (self.detection_probability * self.surviving_weights[j]*likelihood) / kappa
+                weight = (self.detection_probability * self.surviving_weights[j]* likelihood) / kappa
 
                 updated_weights.append(weight)
                 updated_positions.append(position_updated)
