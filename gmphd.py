@@ -326,6 +326,12 @@ class mtt_phd:
     """
     def prune_alg(self): 
         l = 0
+        mergining_threshold = 0
+        truncation_threshold = 0
+        maximum_gaussians = self.num_steps
+
+        while(True): 
+            print(0)
 
     """
     step 5
