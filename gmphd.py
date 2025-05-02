@@ -122,17 +122,6 @@ class mtt_phd:
 
     creates possible location and uncertainties of targets based on where 
     they were previously and how expected to move
-
-    args:
-
-    weights 
-    position
-    covariance
-    n_components
-
-
-    return: 
-    updated weights, position, and covariance
     """
     def predict_birth(self): 
 
@@ -157,13 +146,6 @@ class mtt_phd:
 
     creates other targets that have the potential to appear in the scene
     Note: did not show up in step 1
-
-    args
-    n_components, 
-    weights, 
-    position
-
-
     """
 
     def predict_exist(self):
@@ -199,11 +181,6 @@ class mtt_phd:
         S^(j)_k = R_k + H^j_k|k-1 P^j_k|k-1 H^T_k <-- innovation covariance
         K^j_k = P^j_k|k-1 H^T_k[S^j_k]^-1 <-- kalman gain
         P^(j)_k|k = Q_k-1 + F_k-1 P^j_k-1 F^T_k-1 <-- posterior covariance
-
-    args: 
-    n_components, 
-    covariance
-
     """
     def phd_components_update(self): 
         # declare variables to reference in later steps
@@ -258,12 +235,6 @@ class mtt_phd:
     update
 
     updates current measuremnts, considers missed detections and measurement updates
-
-    args
-    n_components, 
-    weights, 
-    position, 
-    covariance
 
     PSEUDO Code: 
         for j in J_k|k-1
@@ -351,12 +322,6 @@ class mtt_phd:
 
     retrains the best components (e.g, removes inisghnificant components, 
     merge similar components and limit total components to n_components)
-
-    weights, 
-    position, 
-    covariance, 
-    n_components
-
     """
     def prune_alg(self, weight): 
         l = 0
@@ -369,13 +334,6 @@ class mtt_phd:
     output of doing PHD filter
 
     returns a discrete set of the estimated positiosn of targets at each time step
-
-    args
-
-    weights, 
-    position, 
-    covariance, 
-    components
     """
 
     def return_findings(self, weights, position): 
