@@ -308,6 +308,7 @@ class mtt_phd:
             # accounting for true targets and false targets that exist in the clutter
             survivng_rate_weights = [self.surviving_weights[w] * likelihood[w] for w in range(len(self.surviving_weights))]
             sum_surviving_rate_weights = sum(survivng_rate_weights)
+            #*** kappa --> accounts for all possible explanations of z***
             kappa = self.clutter_intensity + sum_surviving_rate_weights
 
             # update each predicted component
@@ -325,7 +326,7 @@ class mtt_phd:
                     surviving weights: prior weight of Gaussian component before considering measurement
                     likelihood: likelihood measurement is true
                     kappa: normalization term --> acconunts for all possible explanations (clutter + contributions from all targets)
-                    """
+                """
                 weight = (self.detection_probability * self.surviving_weights[j]*likelihood) / kappa
 
                 updated_weights.append(weight)
