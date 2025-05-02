@@ -352,9 +352,17 @@ class mtt_phd:
             self.positions_total.append(self.updated_positions[indicies])
             self.covariances_total.append(self.updated_covariance[indicies]) 
 
+        # create variables for merged elements
+        merged_weights = []
+        merged_positions = []
+        merged_covariances = []
 
+        # all indices that need to be considered
+        I = set(range(len(self.updated_weights)))
+        total_merged_targets = 0
 
-        while(True): 
+        while(I): 
+            total_merged_targets+=1
             print(0)
 
     """
