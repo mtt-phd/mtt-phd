@@ -109,6 +109,10 @@ class mtt_phd:
         self.detection_probability = detection_probability
         self.clutter_intensity = clutter_intensity
 
+        self.weights_final = []
+        self.positions_final = []
+        self.covariances_final = []
+
         # 1 component for gaussian, can expand if doing other tyles of PHD filters
         self.sub_components = 1
 
@@ -332,7 +336,6 @@ class mtt_phd:
                                             C = sample covariance matrix
 
     maximum allowed gaussians: number of steps (total targets in the overall target)
-
     """
     def prune_alg(self): 
         l = 0
@@ -340,7 +343,13 @@ class mtt_phd:
         truncation_threshold = 0
         maximum_gaussians = self.num_steps
 
+        # goes through all the indices to determine which ones are within the threshold
+        indices_keep = [i for i, w in enumerate(self.updated_weights) if w > truncation_threshold]
 
+        for indicies in indices_keep: 
+            self.weights_final.append(self.updated_weights[indicies])
+            self.positions_final.append(self.updated_positions[indicies])
+            self.covariances_final.append(self.updated_covariance[indicies])            
 
         while(True): 
             print(0)
