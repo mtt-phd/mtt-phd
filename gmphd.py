@@ -346,6 +346,7 @@ class mtt_phd:
         # goes through all the indices to determine which ones are within the threshold
         indices_keep = [i for i, w in enumerate(self.updated_weights) if w > truncation_threshold]
 
+        # finds all the respective values to keep based on the threshold
         for indicies in indices_keep: 
             self.weights_final.append(self.updated_weights[indicies])
             self.positions_final.append(self.updated_positions[indicies])
