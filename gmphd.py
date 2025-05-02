@@ -109,9 +109,9 @@ class mtt_phd:
         self.detection_probability = detection_probability
         self.clutter_intensity = clutter_intensity
 
-        self.weights_final = []
-        self.positions_final = []
-        self.covariances_final = []
+        self.weights_total = []
+        self.positions_total = []
+        self.covariances_total = []
 
         # 1 component for gaussian, can expand if doing other tyles of PHD filters
         self.sub_components = 1
@@ -348,9 +348,11 @@ class mtt_phd:
 
         # finds all the respective values to keep based on the threshold
         for indicies in indices_keep: 
-            self.weights_final.append(self.updated_weights[indicies])
-            self.positions_final.append(self.updated_positions[indicies])
-            self.covariances_final.append(self.updated_covariance[indicies])            
+            self.weights_total.append(self.updated_weights[indicies])
+            self.positions_total.append(self.updated_positions[indicies])
+            self.covariances_total.append(self.updated_covariance[indicies]) 
+
+
 
         while(True): 
             print(0)
