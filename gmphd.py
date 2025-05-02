@@ -336,7 +336,7 @@ class mtt_phd:
     returns a discrete set of the estimated positiosn of targets at each time step
     """
 
-    def return_findings(self, weights, position): 
+    def return_findings(self): 
         i = 0
         X = []
         for i in range(self.n_components):
