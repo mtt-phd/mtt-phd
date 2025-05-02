@@ -344,7 +344,9 @@ class mtt_phd:
                 for j in range(round(weights[i])):
                     X_hat = [X, position]
         return X_hat
-
+    
+    def mtt_phd_whole(self):
+        return 0 
 
 def main(): 
     covariance = np.load("data_in_progress/covariance.npy")
