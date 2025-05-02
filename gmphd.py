@@ -323,6 +323,16 @@ class mtt_phd:
     retrains the best estimates of the target (e.g, removes inisghnificant positions, 
     merge similar positions and limit total points to steps)
 
+    truncation threshold: 
+    merging threshold: determines how similar predicted targets/components need to be for merging
+        Based on the Mahalanobis distance (measures distances between points - including correlated points for multiple variables): 
+                Mahalanobis distance = d(i,j) = sqrt((x_b_vector - x_a_vector)^T C^-1 (x_b_vector - x_a_vector))^0.5
+                                            x_a_vector = point 1
+                                            x_b_vector = point 2 
+                                            C = sample covariance matrix
+
+    maximum allowed gaussians: number of steps (total targets in the overall target)
+
     """
     def prune_alg(self): 
         l = 0
