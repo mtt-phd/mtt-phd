@@ -111,7 +111,7 @@ class mtt_phd:
         self.clutter_intensity = clutter_intensity
 
         # minimum weight needed to extract values
-        self.threshold_weight = 0.5
+        self.threshold_weight = 0.01
 
         self.weights_total = []
         self.positions_total = []
@@ -160,6 +160,9 @@ class mtt_phd:
 
     def predict_exist(self):
         # similar algorithm to spawning in step 1 but difference is looking at previous weight
+        self.surviving_weights = []
+        self.surviving_positions = []
+        self.surviving_covariances = []
 
         if len(self.previous_weights) > 0:
          # computes the survival points 
@@ -326,6 +329,7 @@ class mtt_phd:
          self.updated_weights = updated_weights
          self.updated_positions = updated_positions
          self.updated_covariance = updated_covariances
+
     
     """
     step pruning 
@@ -347,7 +351,7 @@ class mtt_phd:
     """
     def prune_alg(self): 
         l = 0
-        mergining_threshold = 4.0
+        mergining_threshold = 2.0
         truncation_threshold = 0.01 # make sure squared 
         maximum_gaussians = self.num_steps
 
