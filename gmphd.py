@@ -357,14 +357,24 @@ class mtt_phd:
         merged_positions = []
         merged_covariances = []
 
-        # all indices that need to be considered
+        # all indices that need to be considered; set --> ensures each number is unique
         I = set(range(len(self.updated_weights)))
         total_merged_targets = 0
 
         while(I): 
             total_merged_targets+=1
-            print(0)
+            # finds the largest weight to merge aroudn
+            predicted_largest = max(I, key=lambda idx: self.weights_total[idx])
 
+            componets_closest_to = []
+
+            # finding difference relative to the mahalobis difference
+            for i in I: 
+                difference_between = self.updated_positions[i] - self.updated_positions[predicted_largest]
+                mahalobis_difference = difference_between.T @ np.linalg.inv(self.covariances_total[i]) * difference_between[i]
+                if mahalobis_difference <= mergining_threshold:
+                    componets_closest_to.append(i)
+                
     """
     step 5
     output of doing PHD filter
