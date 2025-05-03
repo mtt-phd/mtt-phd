@@ -111,7 +111,7 @@ class mtt_phd:
         self.clutter_intensity = clutter_intensity
 
         # minimum weight needed to extract values
-        self.threshold_weight = 0.01
+        self.threshold_weight = 0.0001
 
         self.weights_total = []
         self.positions_total = []
@@ -145,6 +145,8 @@ class mtt_phd:
             self.predicted_positions.append(self.birth_position[j])
             self.predicted_covariance.append(self.birth_conv_matrix[j])
         
+        # print("predicted covariance", self.predicted_covariance)
+        
         # excluded the second for loop b/c no spawning 
             # e.g, where spawning appropriate = if randomly have things coming into play (e.g., missle launches from boats)
             # e.g. without spawning == people walking on street
@@ -170,8 +172,10 @@ class mtt_phd:
                 for l in range(self.sub_components): # loops only once for GM PHD but gives possibility to expand
                     # survival weights
                     self.incrementer+=1
+                    # print("I am in the predict exist, this is the previous weight", self.predicted_weights)
                     surviving_weight = self.prob_survival * self.previous_weights[j]
                     self.surviving_weights.append(surviving_weight)
+                    # print("I am in the predict exist")
 
                     # survival position (addition of d is excluded b/c d = 0 (if used in step 1); predicting the position and not spawning)
                     surviving_position = self.state_transition_matrix @ self.previous_positions[j]
@@ -214,6 +218,25 @@ class mtt_phd:
             posterior_covariance_pred = (np.eye(len(position_pred)) - kalman_pred @ self.measurement_matrix) @ covariance_predicted
 
             # save variables for future use
+            self.predicted_calc_measurement.append(measurement_predicted)
+            self.innovation_covariance.append(innovation_covariance_pred)
+            self.kalman_gain.append(kalman_pred)
+            self.posterior_covariance.append(posterior_covariance_pred)
+        
+        # BIRTH
+        # print("this is the birth covariance", self.birth_conv_matrix)
+        # print("this is the predicted weights", self.predicted_weights)
+        for j in range(len(self.predicted_weights)):
+            # print("this is self.predicted_positions",len(self.predicted_positions))
+            position_pred = self.predicted_positions[j]
+            covariance_predicted = self.predicted_covariance[j]
+            # print("this is covariance_predicted = self.posterior_covariance[j]", covariance_predicted)
+            
+            measurement_predicted = self.measurement_matrix @ position_pred
+            innovation_covariance_pred = self.measurement_matrix @ covariance_predicted @ self.measurement_matrix.T + self.measurement_noise_covariance
+            kalman_pred = covariance_predicted @ self.measurement_matrix.T @ np.linalg.inv(innovation_covariance_pred)
+            posterior_covariance_pred = (np.eye(len(position_pred)) - kalman_pred @ self.measurement_matrix) @ covariance_predicted
+
             self.predicted_calc_measurement.append(measurement_predicted)
             self.innovation_covariance.append(innovation_covariance_pred)
             self.kalman_gain.append(kalman_pred)
@@ -269,16 +292,22 @@ class mtt_phd:
 
     """
     def update(self): 
+         print("this is the predicted weights in update step", self.predicted_weights)
          updated_weights = []
          updated_positions = []
          updated_covariances = []
 
+         all_weights = self.predicted_weights + self.surviving_weights
+         all_positions = self.predicted_positions + self.surviving_positions
+         all_covariances = self.predicted_covariance + self.surviving_covariances
+
          # adds in missing detections 
-         for j in range(len(self.surviving_weights)): 
-             weights_missed = (1 - self.detection_probability) * self.surviving_weights[j]
+         for j in range(len(all_weights)): 
+             weights_missed = (1 - self.detection_probability) * all_weights[j]
              updated_weights.append(weights_missed)
-             updated_positions.append(self.surviving_positions[j])
-             updated_covariances.append(self.surviving_covariances[j])
+             print("i am in the update step with updated weights",updated_weights)
+             updated_positions.append(all_positions[j])
+             updated_covariances.append(all_covariances[j])
          
          l = 0
         # measurement update --> looks at the intial measurements
@@ -287,28 +316,28 @@ class mtt_phd:
             likelihoods = []
 
             # computed normalization
-            for j in range(len(self.surviving_weights)): 
+            for j in range(len(all_weights)): 
                 l+=1
                 # determines difference between actual measurement and calculated measurement
                 residual = z - self.predicted_calc_measurement[j]
-                updated_covariances = self.updated_covariances[j]
+                updated_covariance = self.innovation_covariance[j]
 
                 # evaluates if it is part of target
-                likelihood = self.gaussian_likelihood(residual, updated_covariances)
+                likelihood = self.gaussian_likelihood(residual, updated_covariance)
                 likelihoods.append(likelihood)
 
 
             # accounting for true targets and false targets that exist in the clutter
-            survivng_rate_weights = [self.surviving_weights[w] * likelihood[w] for w in range(len(self.surviving_weights))]
+            survivng_rate_weights = [all_weights[w] * likelihoods[w] for w in range(len(all_weights))]
             sum_surviving_rate_weights = sum(survivng_rate_weights)
             #*** kappa --> accounts for all possible explanations of z***
             kappa = self.clutter_intensity + sum_surviving_rate_weights
 
             # update each predicted component
-            for j in range(len(self.surviving_weights)):
+            for j in range(len(all_weights)):
                 residual = z - self.predicted_calc_measurement[j]
                 kalman = self.kalman_gain[j]
-                position_updated = self.surviving_positions[j] + kalman @ residual
+                position_updated = all_positions[j] + kalman @ residual
                 covariance_updated = self.innovation_covariance[j]
 
                 likelihood = likelihoods[j]
@@ -320,12 +349,23 @@ class mtt_phd:
                     likelihood: likelihood measurement is true
                     kappa: normalization term --> accounts for all possible explanations (clutter + contributions from all targets)
                 """
-                weight = (self.detection_probability * self.surviving_weights[j]* likelihood) / kappa
+                weight = (self.detection_probability * all_weights[j]* likelihood) / kappa
 
                 updated_weights.append(weight)
                 updated_positions.append(position_updated)
                 updated_covariances.append(covariance_updated)
-            
+
+        # NEED TO COMMENT
+         # combine surviving and birth components
+        #  all_weights = self.surviving_weights + self.predicted_weights
+        #  all_positions = self.surviving_positions + self.predicted_positions
+        #  all_covariances = self.surviving_covariances + self.predicted_covariance
+        #  for j in range(len(all_weights)):
+        #     weights_missed = (1 - self.detection_probability) * all_weights[j]
+        #     updated_weights.append(weights_missed)
+        #     updated_positions.append(all_positions[j])
+        #     updated_covariances.append(all_covariances[j])
+        
          self.updated_weights = updated_weights
          self.updated_positions = updated_positions
          self.updated_covariance = updated_covariances
@@ -352,17 +392,21 @@ class mtt_phd:
     def prune_alg(self): 
         l = 0
         mergining_threshold = 2.0
-        truncation_threshold = 0.01 # make sure squared 
+        truncation_threshold = 0.00001 # make sure squared 
         maximum_gaussians = self.num_steps
 
         # goes through all the indices to determine which ones are within the threshold
         indices_keep = [i for i, w in enumerate(self.updated_weights) if w > truncation_threshold]
 
         # finds all the respective values to keep based on the threshold
+        print("this is the updated_weights in prune", self.updated_weights)
+        print("updated_positions in prune", self.updated_positions)
         for index in indices_keep: 
             self.weights_total.append(self.updated_weights[index])
             self.positions_total.append(self.updated_positions[index])
             self.covariances_total.append(self.updated_covariance[index]) 
+        
+        print("this is the total_weights in prune", self.weights_total)
 
         # create variables for merged elements
         merged_weights = []
@@ -370,7 +414,7 @@ class mtt_phd:
         merged_covariances = []
 
         # all indices that need to be considered; set --> ensures each number is unique
-        I = set(range(len(self.updated_weights)))
+        I = set(range(len(self.weights_total)))
         total_merged_targets = 0
 
         while(I): 
@@ -383,7 +427,11 @@ class mtt_phd:
 
             # finding difference relative to the mahalobis difference and the largest position
             for i in I: 
+                print("updated position in prune", self.updated_positions[i])
                 difference_between_positions = self.updated_positions[i] - self.updated_positions[predicted_largest]
+                print("this is the difference between positions", difference_between_positions)
+                print("this is the self.covariance_total",self.covariances_total)
+                print("this is the covariance total relative to time step", self.covariance_total[i])
                 mahalobis_difference = difference_between_positions.T @ np.linalg.inv(self.covariances_total[i]) @ difference_between_positions
                 if mahalobis_difference <= mergining_threshold:
                     componets_closest_to.append(i)
@@ -393,7 +441,7 @@ class mtt_phd:
             # merges the positions that are similar
             position_summed = sum(self.positions_total[i] * self.weights_total[i] for i in componets_closest_to) / weight_summed
 
-            covariance_summed = np.zeros_like(self.covariances_total[0])
+            covariance_summed = np.zeros_like(self.covariances_total[0], dtype=float)
 
             # determines covariance that are similar and merges them
             for i in componets_closest_to:
@@ -413,6 +461,8 @@ class mtt_phd:
         merged_weights_condensed = []
         merged_positions_condensed = []
         merged_covariances_condensed = []
+
+        print("this is the merged weights",merged_weights)
         
         if len(merged_weights) > maximum_gaussians:
             sorted_indices = np.argsort(merged_weights)[::-1][:maximum_gaussians] # gets it relative to the number of expected
@@ -439,12 +489,17 @@ class mtt_phd:
     """
     def return_findings(self):
         # based on weight, determines if fit within threshold
+        print("this is the updated weights in return findings", self.updated_weights)
         for i in range(len(self.updated_weights)):
+            # print("this is the weights", self.updated_weights)
             if self.updated_weights[i] >= self.threshold_weight:
-                rounded_weight = int(np.round(self.updated_weights[i]))
+                print("updated weights in prune after threshold",self.updated_weights[i])
+                rounded_weight = int(np.ceil(self.updated_weights[i]))
+                print("this is the rounded weight",rounded_weight)
                 # weight --> how many are possible to be at location
                 for _ in range(rounded_weight):
                     self.state_estimates.append(self.updated_positions[i])
+        print("this is the state_estimates",self.state_estimates)
         # extracted positions
         return self.state_estimates
     """
@@ -469,13 +524,18 @@ class mtt_phd:
 
         history = []
         for time in range(self.num_steps):
+        #for time in range(1):
             self.current_measurements = [m[1] for m in self.simulated_measurements[time]]
+           # print("this is the simulated measurements",self.simulated_measurements)
+           # print("this is the current measurements", self.current_measurements)
             estimates = self.mtt_phd_whole()
+            print("this is the estimates", estimates)
             history.append(estimates)
 
             self.previous_positions = self.updated_positions
             self.previous_covariance = self.updated_covariance
-            self.previous_weight = self.updated_weights
+            print("this is the previous_covariance", self.previous_covariance)
+            self.previous_weights = self.updated_weights
 
         return history
 
