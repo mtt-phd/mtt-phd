@@ -347,8 +347,8 @@ class mtt_phd:
     """
     def prune_alg(self): 
         l = 0
-        mergining_threshold = 0
-        truncation_threshold = 0 # make sure squared 
+        mergining_threshold = 4.0
+        truncation_threshold = 0.01 # make sure squared 
         maximum_gaussians = self.num_steps
 
         # goes through all the indices to determine which ones are within the threshold
