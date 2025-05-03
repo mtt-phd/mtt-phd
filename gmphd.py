@@ -343,7 +343,7 @@ class mtt_phd:
     def prune_alg(self): 
         l = 0
         mergining_threshold = 0
-        truncation_threshold = 0
+        truncation_threshold = 0 # make sure squared 
         maximum_gaussians = self.num_steps
 
         # goes through all the indices to determine which ones are within the threshold
@@ -375,20 +375,20 @@ class mtt_phd:
             # finding difference relative to the mahalobis difference and the largest position
             for i in I: 
                 difference_between_positions = self.updated_positions[i] - self.updated_positions[predicted_largest]
-                mahalobis_difference = difference_between_positions.T @ np.linalg.inv(self.covariances_total[i]) * difference_between_positions[i]
+                mahalobis_difference = difference_between_positions.T @ np.linalg.inv(self.covariances_total[i]) @ difference_between_positions[i]
                 if mahalobis_difference <= mergining_threshold:
                     componets_closest_to.append(i)
             
             # merging weights; points that are very similar to each other are merged
             weight_summed = sum(self.weights_total[i] for i in componets_closest_to)
             # merges the positions that are similar
-            position_summed = sum(self.positions_total[i] * self.weight_total[i] for i in componets_closest_to) / weight_summed
+            position_summed = sum(self.positions_total[i] * self.weights_total[i] for i in componets_closest_to) / weight_summed
 
             covariance_summed = np.zero_like(self.covariances_total[0])
 
             # determines covariance that are similar and merges them
             for i in componets_closest_to:
-                difference_between_postions_summed = self.position_total[i] - position_summed
+                difference_between_postions_summed = self.positions_total[i] - position_summed
                 covariance_summed += self.weights_total[i] * (self.covariances_total[i] + 
                                                               np.outer(difference_between_postions_summed, difference_between_postions_summed))
             covariance_summed /= weight_summed
