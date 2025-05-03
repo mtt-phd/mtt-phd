@@ -77,7 +77,7 @@ class mtt_phd:
         self.birth_position = position # m
         self.birth_conv_matrix = p_cov # P
         self.n_component = num_components # number of targets
-        self.simulated_measurement = measurement # z 
+        self.simulated_measurements = measurement # z 
         self.state_transition_matrix = state_transition_matrix 
         self.process_noise_matrix = process_noise_matrix
         self.num_steps = num_steps
