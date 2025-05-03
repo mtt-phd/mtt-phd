@@ -77,7 +77,7 @@ class mtt_phd:
         self.birth_position = position # m
         self.birth_conv_matrix = p_cov # P
         self.n_component = num_components # number of targets
-        self.birth_measurement = measurement # z 
+        self.simulated_measurement = measurement # z 
         self.state_transition_matrix = state_transition_matrix 
         self.process_noise_matrix = process_noise_matrix
         self.num_steps = num_steps
@@ -279,7 +279,7 @@ class mtt_phd:
          
          l = 0
         # measurement update --> looks at the intial measurements
-         for z in self.birth_measurement:
+         for z in self.current_measurements:
             l = 0
             likelihoods = []
 
@@ -454,6 +454,26 @@ class mtt_phd:
         self.update()
         self.prune_alg()
         return self.return_findings()
+    
+    """
+    Run the full filter over multiple timesteps to finetune 
+
+    Return: 
+        the PHD filter at all the time 
+    """
+    def full_PHD_filter_run(self): 
+
+        history = []
+        for time in range(self.num_steps):
+            self.current_measurements = [m[1] for m in self.simulated_measurements[time]]
+            estimates = self.mtt_phd_whole()
+            history.append(estimates)
+
+            self.previous_positions = self.updated_positions
+            self.previous_covariance = self.updated_covariance
+            self.previous_weight = self.updated_weights
+
+        return history
 
 def main(): 
     covariance = np.load("data_in_progress/covariance.npy")
