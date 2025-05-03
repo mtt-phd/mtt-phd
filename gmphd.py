@@ -324,6 +324,7 @@ class mtt_phd:
     
     """
     step pruning 
+
     retrains the best estimates of the target (e.g, removes inisghnificant positions, 
     merge similar positions and limit total points to steps)
 
@@ -366,6 +367,7 @@ class mtt_phd:
             # finds the largest weight to merge aroudn
             predicted_largest = max(I, key=lambda idx: self.weights_total[idx])
 
+            # L
             componets_closest_to = []
 
             # finding difference relative to the mahalobis difference
@@ -374,6 +376,14 @@ class mtt_phd:
                 mahalobis_difference = difference_between.T @ np.linalg.inv(self.covariances_total[i]) * difference_between[i]
                 if mahalobis_difference <= mergining_threshold:
                     componets_closest_to.append(i)
+            
+            # merging weights; points that are very similar to each other are merged
+            weight_summed = sum(self.weights_total[i] for i in componets_closest_to)
+            position_summed = sum(self.positions_total[i] * self.weight_total[i] for i in componets_closest_to) / weight_summed
+
+            covariance_summed = np.zero_like(self.covariances_total[0])
+
+            for i in componets_closest_to:
                 
     """
     step 5
