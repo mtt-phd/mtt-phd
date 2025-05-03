@@ -350,10 +350,10 @@ class mtt_phd:
         indices_keep = [i for i, w in enumerate(self.updated_weights) if w > truncation_threshold]
 
         # finds all the respective values to keep based on the threshold
-        for indicies in indices_keep: 
-            self.weights_total.append(self.updated_weights[indicies])
-            self.positions_total.append(self.updated_positions[indicies])
-            self.covariances_total.append(self.updated_covariance[indicies]) 
+        for index in indices_keep: 
+            self.weights_total.append(self.updated_weights[index])
+            self.positions_total.append(self.updated_positions[index])
+            self.covariances_total.append(self.updated_covariance[index]) 
 
         # create variables for merged elements
         merged_weights = []
