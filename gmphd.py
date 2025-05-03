@@ -335,6 +335,8 @@ class mtt_phd:
                                             x_a_vector = point 1
                                             x_b_vector = point 2 
                                             C = sample covariance matrix
+                                            source: https://www.statisticshowto.com/mahalanobis-distance/ (has equation with ^0.5)
+                                            source: https://www.mathworks.com/help/stats/mahal.html (equation without ^0.5 so decided to keep it as without 0.5)
 
     maximum allowed gaussians: number of steps (total targets in the overall target)
     """
