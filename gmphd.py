@@ -398,6 +398,25 @@ class mtt_phd:
             # removed merged/ summed components from the set
             I-=set(componets_closest_to)
         
+        # get the amount relative to the total amount of expected targets
+        merged_weights_condensed = []
+        merged_positions_condensed = []
+        merged_covariances_condensed = []
+        
+        if len(merged_weights) > self.num_steps:
+            sorted_indices = np.argsort(merged_weights)[::-1][:self.num_steps] # gets it relative to the number of expected
+            for i in sorted_indices:
+                merged_weights_condensed.append(merged_weights[i])
+                merged_covariances_condensed.append(merged_covariances[i])
+                merged_positions_condensed.append(merged_positions[i])
+        else: 
+            merged_weights_condensed = merged_weights
+            merged_covariances_condensed = merged_covariances
+            merged_positions_condensed = merged_positions
+        
+        self.updated_covariance = merged_covariances_condensed
+        self.updated_positions = merged_positions_condensed
+        self.updated_weights = merged_weights_condensed
                 
     """
     step 5
