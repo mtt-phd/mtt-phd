@@ -410,8 +410,8 @@ class mtt_phd:
         merged_positions_condensed = []
         merged_covariances_condensed = []
         
-        if len(merged_weights) > self.num_steps:
-            sorted_indices = np.argsort(merged_weights)[::-1][:self.num_steps] # gets it relative to the number of expected
+        if len(merged_weights) > maximum_gaussians:
+            sorted_indices = np.argsort(merged_weights)[::-1][:maximum_gaussians] # gets it relative to the number of expected
             for i in sorted_indices:
                 merged_weights_condensed.append(merged_weights[i])
                 merged_covariances_condensed.append(merged_covariances[i])
