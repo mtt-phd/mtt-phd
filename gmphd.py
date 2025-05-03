@@ -433,11 +433,16 @@ class mtt_phd:
 
     returns a discrete set of the estimated positions of targets at each time step
     """
-
     def return_findings(self):
         
-
-
+        # based on weight, determines if fit within threshold
+        for i in range(len(self.updated_weights)):
+            if self.updated_weights[i] >= self.threshold_weight:
+                rounded_weight = int(np.round(self.updated_weights[i]))
+                # weight --> how many are possible to be at location
+                for _ in range(rounded_weight):
+                    self.state_estimates.append(self.updated_positions)
+        # extracted positions
         return self.state_estimate
     
     def mtt_phd_whole(self):
