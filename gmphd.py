@@ -370,20 +370,34 @@ class mtt_phd:
             # L
             componets_closest_to = []
 
-            # finding difference relative to the mahalobis difference
+            # finding difference relative to the mahalobis difference and the largest position
             for i in I: 
-                difference_between = self.updated_positions[i] - self.updated_positions[predicted_largest]
-                mahalobis_difference = difference_between.T @ np.linalg.inv(self.covariances_total[i]) * difference_between[i]
+                difference_between_positions = self.updated_positions[i] - self.updated_positions[predicted_largest]
+                mahalobis_difference = difference_between_positions.T @ np.linalg.inv(self.covariances_total[i]) * difference_between_positions[i]
                 if mahalobis_difference <= mergining_threshold:
                     componets_closest_to.append(i)
             
             # merging weights; points that are very similar to each other are merged
             weight_summed = sum(self.weights_total[i] for i in componets_closest_to)
+            # merges the positions that are similar
             position_summed = sum(self.positions_total[i] * self.weight_total[i] for i in componets_closest_to) / weight_summed
 
             covariance_summed = np.zero_like(self.covariances_total[0])
 
+            # determines covariance that are similar and merges them
             for i in componets_closest_to:
+                difference_between_postions_summed = self.position_total[i] - position_summed
+                covariance_summed += self.weights_total[i] * (self.covariances_total[i] + 
+                                                              np.outer(difference_between_postions_summed, difference_between_postions_summed))
+            covariance_summed /= weight_summed
+
+            merged_weights.append(weight_summed)
+            merged_positions.append(position_summed)
+            merged_covariances.append(covariance_summed)
+            
+            # removed merged/ summed components from the set
+            I-=set(componets_closest_to)
+        
                 
     """
     step 5
