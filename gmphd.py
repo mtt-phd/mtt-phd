@@ -480,16 +480,17 @@ class mtt_phd:
         return history
 
 def main(): 
-    covariance = np.load("data_in_progress/covariance.npy")
-    print(covariance)
-    measurement = np.load("data_in_progress/measurements.npy")
-    print(measurement)
-    weights = np.load("data_in_progress/weights.npy")
-    print(weights)
-    obj = mtt_phd(weights=3, position=3, p_cov=3, num_components=3, measurement=3)
-    print("I am declared")
-    obj.predict_birth()
-    print("this is the main function")
+    print()
+    # covariance = np.load("data_in_progress/covariance.npy")
+    # print(covariance)
+    # measurement = np.load("data_in_progress/measurements.npy")
+    # print(measurement)
+    # weights = np.load("data_in_progress/weights.npy")
+    # print(weights)
+    # obj = mtt_phd(weights=3, position=3, p_cov=3, num_components=3, measurement=3)
+    # print("I am declared")
+    # obj.predict_birth()
+    # print("this is the main function")
 
 
 if __name__ == "__main__": 
