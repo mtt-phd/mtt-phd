@@ -110,6 +110,10 @@ class mtt_phd:
         self.detection_probability = detection_probability
         self.clutter_intensity = clutter_intensity
 
+        self.weights_total = []
+        self.positions_total = []
+        self.covariances_total = []
+
         # 1 component for gaussian, can expand if doing other tyles of PHD filters
         self.sub_components = 1
 
@@ -320,21 +324,62 @@ class mtt_phd:
     
     """
     step pruning 
+    retrains the best estimates of the target (e.g, removes inisghnificant positions, 
+    merge similar positions and limit total points to steps)
 
-    retrains the best components (e.g, removes inisghnificant components, 
-    merge similar components and limit total to target)
+    truncation threshold: determines whether weight is reasonable, (e.g. w > T keep)
+    merging threshold: determines how similar predicted targets/components need to be for merging
+        Based on the Mahalanobis distance (measures distances between points - including correlated points for multiple variables): 
+                Mahalanobis distance = d(i,j) = sqrt((x_b_vector - x_a_vector)^T C^-1 (x_b_vector - x_a_vector))^0.5
+                                            x_a_vector = point 1
+                                            x_b_vector = point 2 
+                                            C = sample covariance matrix
+
+    maximum allowed gaussians: number of steps (total targets in the overall target)
     """
-    def prune_alg(self, weight): 
+    def prune_alg(self): 
         l = 0
-        while (self.n_component > 0):
-            l+=1
-            j = max(weight)
+        mergining_threshold = 0
+        truncation_threshold = 0
+        maximum_gaussians = self.num_steps
 
+        # goes through all the indices to determine which ones are within the threshold
+        indices_keep = [i for i, w in enumerate(self.updated_weights) if w > truncation_threshold]
+
+        # finds all the respective values to keep based on the threshold
+        for indicies in indices_keep: 
+            self.weights_total.append(self.updated_weights[indicies])
+            self.positions_total.append(self.updated_positions[indicies])
+            self.covariances_total.append(self.updated_covariance[indicies]) 
+
+        # create variables for merged elements
+        merged_weights = []
+        merged_positions = []
+        merged_covariances = []
+
+        # all indices that need to be considered; set --> ensures each number is unique
+        I = set(range(len(self.updated_weights)))
+        total_merged_targets = 0
+
+        while(I): 
+            total_merged_targets+=1
+            # finds the largest weight to merge aroudn
+            predicted_largest = max(I, key=lambda idx: self.weights_total[idx])
+
+            componets_closest_to = []
+
+            # finding difference relative to the mahalobis difference
+            for i in I: 
+                difference_between = self.updated_positions[i] - self.updated_positions[predicted_largest]
+                mahalobis_difference = difference_between.T @ np.linalg.inv(self.covariances_total[i]) * difference_between[i]
+                if mahalobis_difference <= mergining_threshold:
+                    componets_closest_to.append(i)
+                
     """
     step 5
     output of doing PHD filter
 
-    returns a discrete set of the estimated positiosn of targets at each time step
+    returns a discrete set of the estimated positions of targets at each time step
     """
 
     def return_findings(self): 
