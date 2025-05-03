@@ -331,7 +331,7 @@ class mtt_phd:
     truncation threshold: determines whether weight is reasonable, (e.g. w > T keep)
     merging threshold: determines how similar predicted targets/components need to be for merging
         Based on the Mahalanobis distance (measures distances between points - including correlated points for multiple variables): 
-                Mahalanobis distance = d(i,j) = sqrt((x_b_vector - x_a_vector)^T C^-1 (x_b_vector - x_a_vector))^0.5
+                Mahalanobis distance = d(i,j) = sqrt((x_b_vector - x_a_vector)^T C^-1 (x_b_vector - x_a_vector))
                                             x_a_vector = point 1
                                             x_b_vector = point 2 
                                             C = sample covariance matrix
