@@ -110,6 +110,9 @@ class mtt_phd:
         self.detection_probability = detection_probability
         self.clutter_intensity = clutter_intensity
 
+        # minimum weight needed to extract values
+        self.threshold_weight = 0.5
+
         self.weights_total = []
         self.positions_total = []
         self.covariances_total = []
@@ -119,6 +122,8 @@ class mtt_phd:
 
         # create the predicted positions
         self.incrementer = 0
+
+        self.state_estimates = []
 
     
     """
@@ -424,12 +429,16 @@ class mtt_phd:
     step 5
     output of doing PHD filter
 
+    determines the final positions being extracted
+
     returns a discrete set of the estimated positions of targets at each time step
     """
 
     def return_findings(self):
-        state_estimate = []
-        return state_estimate
+        
+
+
+        return self.state_estimate
     
     def mtt_phd_whole(self):
         return 0 
