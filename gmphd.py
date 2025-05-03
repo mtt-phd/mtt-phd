@@ -434,7 +434,6 @@ class mtt_phd:
     returns a discrete set of the estimated positions of targets at each time step
     """
     def return_findings(self):
-        
         # based on weight, determines if fit within threshold
         for i in range(len(self.updated_weights)):
             if self.updated_weights[i] >= self.threshold_weight:
@@ -444,9 +443,17 @@ class mtt_phd:
                     self.state_estimates.append(self.updated_positions)
         # extracted positions
         return self.state_estimate
-    
+    """
+    Runs whole algorithm to determine the predicted targets
+    """
     def mtt_phd_whole(self):
-        return 0 
+        # lists algorithms order
+        self.predict_birth()
+        self.predict_exist()
+        self.phd_components_update()
+        self.update()
+        self.prune_alg()
+        return self.return_findings()
 
 def main(): 
     covariance = np.load("data_in_progress/covariance.npy")
