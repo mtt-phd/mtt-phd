@@ -291,7 +291,7 @@ class mtt_phd:
                 updated_covariances = self.updated_covariances[j]
 
                 # evaluates if it is part of target
-                likelihood = self.guassian_likelihood(residual, updated_covariances)
+                likelihood = self.gaussian_likelihood(residual, updated_covariances)
                 likelihoods.append(likelihood)
 
 
@@ -380,7 +380,7 @@ class mtt_phd:
             # finding difference relative to the mahalobis difference and the largest position
             for i in I: 
                 difference_between_positions = self.updated_positions[i] - self.updated_positions[predicted_largest]
-                mahalobis_difference = difference_between_positions.T @ np.linalg.inv(self.covariances_total[i]) @ difference_between_positions[i]
+                mahalobis_difference = difference_between_positions.T @ np.linalg.inv(self.covariances_total[i]) @ difference_between_positions
                 if mahalobis_difference <= mergining_threshold:
                     componets_closest_to.append(i)
             
@@ -389,7 +389,7 @@ class mtt_phd:
             # merges the positions that are similar
             position_summed = sum(self.positions_total[i] * self.weights_total[i] for i in componets_closest_to) / weight_summed
 
-            covariance_summed = np.zero_like(self.covariances_total[0])
+            covariance_summed = np.zeros_like(self.covariances_total[0])
 
             # determines covariance that are similar and merges them
             for i in componets_closest_to:
@@ -440,9 +440,9 @@ class mtt_phd:
                 rounded_weight = int(np.round(self.updated_weights[i]))
                 # weight --> how many are possible to be at location
                 for _ in range(rounded_weight):
-                    self.state_estimates.append(self.updated_positions)
+                    self.state_estimates.append(self.updated_positions[i])
         # extracted positions
-        return self.state_estimate
+        return self.state_estimates
     """
     Runs whole algorithm to determine the predicted targets
     """
