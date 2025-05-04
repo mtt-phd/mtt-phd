@@ -70,7 +70,7 @@ class mtt_phd:
     H = measurement_matrix
     R = measurement_noise_covariance
     """
-    """                   w          m      P           J              z               F                         Q             num steps      H            R                   det_prob              clutter_rate"""
+    """                   w          m      P           J              z               F                         Q            num steps       H                 R                   det_prob             clutter_rate"""
     def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability, clutter_intensity):
         # birth data
         self.birth_weights = weights # w
@@ -139,7 +139,7 @@ class mtt_phd:
         # i = 0
 
         # creates the predicted data for each birth component
-        for j in range(self.total_num):
+        for j in range(len(self.birth_weights)):
             self.incrementer+=1
             self.predicted_weights.append(self.birth_weights[j])
             self.predicted_positions.append(self.birth_position[j])
@@ -338,7 +338,7 @@ class mtt_phd:
                 residual = z - self.predicted_calc_measurement[j]
                 kalman = self.kalman_gain[j]
                 position_updated = all_positions[j] + kalman @ residual
-                covariance_updated = self.innovation_covariance[j]
+                covariance_updated = self.posterior_covariance[j]
 
                 likelihood = likelihoods[j]
 
@@ -428,11 +428,14 @@ class mtt_phd:
             # finding difference relative to the mahalobis difference and the largest position
             for i in I: 
                 # print("updated position in prune", self.updated_positions[i])
-                difference_between_positions = self.updated_positions[i] - self.updated_positions[predicted_largest]
+                point_1 = np.array([self.positions_total[i][0], self.positions_total[i][1]])
+                point_2 = np.array([self.positions_total[predicted_largest][0],self.positions_total[predicted_largest][1]])
+                difference_between_positions = point_1 - point_2
+                cov_ij = self.covariances_total[i][:2, :2]
                 # print("this is the difference between positions", difference_between_positions)
-                #print("this is the self.covariance_total",self.covariances_total)
+                # print("this is the self.covariance_total",self.covariances_total)
                 # print("this is the covariance total relative to time step", self.covariances_total[i])
-                mahalobis_difference = difference_between_positions.T @ np.linalg.inv(self.covariances_total[i]) @ difference_between_positions
+                mahalobis_difference = difference_between_positions.T @ np.linalg.inv(cov_ij) @ difference_between_positions
                 if mahalobis_difference <= mergining_threshold:
                     componets_closest_to.append(i)
             
@@ -445,9 +448,18 @@ class mtt_phd:
 
             # determines covariance that are similar and merges them
             for i in componets_closest_to:
-                difference_between_postions_summed = self.positions_total[i] - position_summed
-                covariance_summed += self.weights_total[i] * (self.covariances_total[i] + 
-                                                              np.outer(difference_between_postions_summed, difference_between_postions_summed))
+            #     difference_between_postions_summed = self.positions_total[i] - position_summed
+            #     covariance_summed += self.weights_total[i] * (self.covariances_total[i] + 
+            #                                                   np.outer(difference_between_postions_summed, difference_between_postions_summed))
+                difference_between_postions_summed = self.positions_total[i] - position_summed  # FULL (4,)
+                print("this is the difference between positions summed shape",difference_between_postions_summed.shape)
+                print("this is the covariance total shape", self.covariances_total[i].shape)
+                print("this is the weights_total[i]", self.weights_total[i])
+                covariance_summed += self.weights_total[i] * (
+                        self.covariances_total[i] +
+                        np.outer(difference_between_postions_summed, difference_between_postions_summed)  # FULL (4x4)
+)
+
             covariance_summed /= weight_summed
 
             merged_weights.append(weight_summed)
@@ -499,7 +511,7 @@ class mtt_phd:
                 # weight --> how many are possible to be at location
                 for _ in range(rounded_weight):
                     self.state_estimates.append(self.updated_positions[i])
-        print("this is the state_estimates",self.state_estimates)
+        # print("this is the state_estimates",self.state_estimates)
         # extracted positions
         return self.state_estimates
     """
@@ -531,7 +543,6 @@ class mtt_phd:
             estimates = self.mtt_phd_whole()
             print("this is the estimates", estimates)
             history.append(estimates)
-
             self.previous_positions = self.updated_positions
             self.previous_covariances = self.updated_covariance
             print("time", time)
@@ -541,17 +552,6 @@ class mtt_phd:
 
 def main(): 
     print()
-    # covariance = np.load("data_in_progress/covariance.npy")
-    # print(covariance)
-    # measurement = np.load("data_in_progress/measurements.npy")
-    # print(measurement)
-    # weights = np.load("data_in_progress/weights.npy")
-    # print(weights)
-    # obj = mtt_phd(weights=3, position=3, p_cov=3, num_components=3, measurement=3)
-    # print("I am declared")
-    # obj.predict_birth()
-    # print("this is the main function")
-
 
 if __name__ == "__main__": 
     main()
