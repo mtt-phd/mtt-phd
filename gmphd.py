@@ -316,7 +316,7 @@ class mtt_phd:
             l = 0
             likelihoods = []
 
-            # computed normalization
+            # compute the likelihood (Gaussian/ normal) that the measurement comes from the predicted target
             for j in range(len(all_weights)): 
                 l+=1
                 # determines difference between actual measurement and calculated measurement
