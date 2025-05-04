@@ -494,7 +494,7 @@ class mtt_phd:
             # print("this is the weights", self.updated_weights)
             if self.updated_weights[i] >= self.threshold_weight:
                 # print("updated weights in prune after threshold",self.updated_weights[i])
-                rounded_weight = int(np.ceil(self.updated_weights[i]))
+                rounded_weight = int(round(self.updated_weights[i]))
                 # print("this is the rounded weight",rounded_weight)
                 # weight --> how many are possible to be at location
                 for _ in range(rounded_weight):
