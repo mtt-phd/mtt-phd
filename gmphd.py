@@ -111,7 +111,7 @@ class mtt_phd:
         self.clutter_intensity = clutter_intensity
 
         # minimum weight needed to extract values
-        self.threshold_weight = 0.0001
+        self.threshold_weight = 0.1
 
         self.weights_total = []
         self.positions_total = []
@@ -391,8 +391,8 @@ class mtt_phd:
     """
     def prune_alg(self): 
         l = 0
-        mergining_threshold = 2.0
-        truncation_threshold = 0.00001 # make sure squared 
+        mergining_threshold = 3.0
+        truncation_threshold = 0.001 # make sure squared 
         maximum_gaussians = self.num_steps
 
         # goes through all the indices to determine which ones are within the threshold
@@ -452,9 +452,9 @@ class mtt_phd:
             #     covariance_summed += self.weights_total[i] * (self.covariances_total[i] + 
             #                                                   np.outer(difference_between_postions_summed, difference_between_postions_summed))
                 difference_between_postions_summed = self.positions_total[i] - position_summed  # FULL (4,)
-                print("this is the difference between positions summed shape",difference_between_postions_summed.shape)
-                print("this is the covariance total shape", self.covariances_total[i].shape)
-                print("this is the weights_total[i]", self.weights_total[i])
+                # print("this is the difference between positions summed shape",difference_between_postions_summed.shape)
+                # print("this is the covariance total shape", self.covariances_total[i].shape)
+                # print("this is the weights_total[i]", self.weights_total[i])
                 covariance_summed += self.weights_total[i] * (
                         self.covariances_total[i] +
                         np.outer(difference_between_postions_summed, difference_between_postions_summed)  # FULL (4x4)
@@ -541,11 +541,11 @@ class mtt_phd:
            # print("this is the simulated measurements",self.simulated_measurements)
            # print("this is the current measurements", self.current_measurements)
             estimates = self.mtt_phd_whole()
-            print("this is the estimates", estimates)
+            # print("this is the estimates", estimates)
             history.append(estimates)
             self.previous_positions = self.updated_positions
             self.previous_covariances = self.updated_covariance
-            print("time", time)
+            # print("time", time)
             self.previous_weights = self.updated_weights
 
         return history
