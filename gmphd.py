@@ -431,7 +431,7 @@ class mtt_phd:
                 difference_between_positions = self.updated_positions[i] - self.updated_positions[predicted_largest]
                 print("this is the difference between positions", difference_between_positions)
                 print("this is the self.covariance_total",self.covariances_total)
-                print("this is the covariance total relative to time step", self.covariance_total[i])
+                print("this is the covariance total relative to time step", self.covariances_total[i])
                 mahalobis_difference = difference_between_positions.T @ np.linalg.inv(self.covariances_total[i]) @ difference_between_positions
                 if mahalobis_difference <= mergining_threshold:
                     componets_closest_to.append(i)
