@@ -354,18 +354,7 @@ class mtt_phd:
                 updated_weights.append(weight)
                 updated_positions.append(position_updated)
                 updated_covariances.append(covariance_updated)
-
-        # NEED TO COMMENT
-         # combine surviving and birth components
-        #  all_weights = self.surviving_weights + self.predicted_weights
-        #  all_positions = self.surviving_positions + self.predicted_positions
-        #  all_covariances = self.surviving_covariances + self.predicted_covariance
-        #  for j in range(len(all_weights)):
-        #     weights_missed = (1 - self.detection_probability) * all_weights[j]
-        #     updated_weights.append(weights_missed)
-        #     updated_positions.append(all_positions[j])
-        #     updated_covariances.append(all_covariances[j])
-        
+                
          self.updated_weights = updated_weights
          self.updated_positions = updated_positions
          self.updated_covariance = updated_covariances
