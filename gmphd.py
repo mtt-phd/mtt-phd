@@ -70,8 +70,8 @@ class mtt_phd:
     H = measurement_matrix
     R = measurement_noise_covariance
     """
-    """                   w          m      P           J              z               F                         Q            num steps       H                 R                   det_prob             clutter_rate"""
-    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability, clutter_intensity):
+    """                   w          m      P           J              z               F                         Q            num steps       H                 R                   det_prob             clutter_rate,   threshold_weight,    merging_threshold, truncation_threshold  """
+    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability, clutter_intensity,  threshold_weight, merging_threshold, truncation_threshold):
         # birth data
         self.birth_weights = weights # w
         self.birth_position = position # m
@@ -83,6 +83,10 @@ class mtt_phd:
         self.num_steps = num_steps
         self.measurement_matrix = measurement_matrix
         self.measurement_noise_covariance = measurement_noise 
+        # minimum weight needed to extract values
+        self.threshold_weight = threshold_weight
+        self.merging_threshold = merging_threshold
+        self.truncation_threshold = truncation_threshold # make sure squared
 
         # how many births are defined in the model,
         # each birth is considered as a hypothesis about where the target may be
@@ -109,9 +113,6 @@ class mtt_phd:
 
         self.detection_probability = detection_probability
         self.clutter_intensity = clutter_intensity
-
-        # minimum weight needed to extract values
-        self.threshold_weight = 0.1
 
         self.weights_total = []
         self.positions_total = []
@@ -380,12 +381,10 @@ class mtt_phd:
     """
     def prune_alg(self): 
         l = 0
-        mergining_threshold = 3.0
-        truncation_threshold = 0.001 # make sure squared 
         maximum_gaussians = self.num_steps
 
         # goes through all the indices to determine which ones are within the threshold
-        indices_keep = [i for i, w in enumerate(self.updated_weights) if w > truncation_threshold]
+        indices_keep = [i for i, w in enumerate(self.updated_weights) if w > self.truncation_threshold]
 
         # finds all the respective values to keep based on the threshold
         # print("this is the updated_weights in prune", self.updated_weights)
@@ -425,7 +424,7 @@ class mtt_phd:
                 # print("this is the self.covariance_total",self.covariances_total)
                 # print("this is the covariance total relative to time step", self.covariances_total[i])
                 mahalobis_difference = difference_between_positions.T @ np.linalg.inv(cov_ij) @ difference_between_positions
-                if mahalobis_difference <= mergining_threshold:
+                if mahalobis_difference <= self.merging_threshold:
                     componets_closest_to.append(i)
             
             # merging weights; points that are very similar to each other are merged
