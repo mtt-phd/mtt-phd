@@ -292,7 +292,7 @@ class mtt_phd:
 
     """
     def update(self): 
-         print("this is the predicted weights in update step", self.predicted_weights)
+         # print("this is the predicted weights in update step", self.predicted_weights)
          updated_weights = []
          updated_positions = []
          updated_covariances = []
@@ -305,7 +305,7 @@ class mtt_phd:
          for j in range(len(all_weights)): 
              weights_missed = (1 - self.detection_probability) * all_weights[j]
              updated_weights.append(weights_missed)
-             print("i am in the update step with updated weights",updated_weights)
+            #  print("i am in the update step with updated weights",updated_weights)
              updated_positions.append(all_positions[j])
              updated_covariances.append(all_covariances[j])
          
@@ -399,14 +399,14 @@ class mtt_phd:
         indices_keep = [i for i, w in enumerate(self.updated_weights) if w > truncation_threshold]
 
         # finds all the respective values to keep based on the threshold
-        print("this is the updated_weights in prune", self.updated_weights)
-        print("updated_positions in prune", self.updated_positions)
+        # print("this is the updated_weights in prune", self.updated_weights)
+        # print("updated_positions in prune", self.updated_positions)
         for index in indices_keep: 
             self.weights_total.append(self.updated_weights[index])
             self.positions_total.append(self.updated_positions[index])
             self.covariances_total.append(self.updated_covariance[index]) 
         
-        print("this is the total_weights in prune", self.weights_total)
+        # print("this is the total_weights in prune", self.weights_total)
 
         # create variables for merged elements
         merged_weights = []
@@ -427,11 +427,11 @@ class mtt_phd:
 
             # finding difference relative to the mahalobis difference and the largest position
             for i in I: 
-                print("updated position in prune", self.updated_positions[i])
+                # print("updated position in prune", self.updated_positions[i])
                 difference_between_positions = self.updated_positions[i] - self.updated_positions[predicted_largest]
-                print("this is the difference between positions", difference_between_positions)
-                print("this is the self.covariance_total",self.covariances_total)
-                print("this is the covariance total relative to time step", self.covariances_total[i])
+                # print("this is the difference between positions", difference_between_positions)
+                #print("this is the self.covariance_total",self.covariances_total)
+                # print("this is the covariance total relative to time step", self.covariances_total[i])
                 mahalobis_difference = difference_between_positions.T @ np.linalg.inv(self.covariances_total[i]) @ difference_between_positions
                 if mahalobis_difference <= mergining_threshold:
                     componets_closest_to.append(i)
@@ -462,7 +462,7 @@ class mtt_phd:
         merged_positions_condensed = []
         merged_covariances_condensed = []
 
-        print("this is the merged weights",merged_weights)
+        # print("this is the merged weights",merged_weights)
         
         if len(merged_weights) > maximum_gaussians:
             sorted_indices = np.argsort(merged_weights)[::-1][:maximum_gaussians] # gets it relative to the number of expected
@@ -489,13 +489,13 @@ class mtt_phd:
     """
     def return_findings(self):
         # based on weight, determines if fit within threshold
-        print("this is the updated weights in return findings", self.updated_weights)
+        # print("this is the updated weights in return findings", self.updated_weights)
         for i in range(len(self.updated_weights)):
             # print("this is the weights", self.updated_weights)
             if self.updated_weights[i] >= self.threshold_weight:
-                print("updated weights in prune after threshold",self.updated_weights[i])
+                # print("updated weights in prune after threshold",self.updated_weights[i])
                 rounded_weight = int(np.ceil(self.updated_weights[i]))
-                print("this is the rounded weight",rounded_weight)
+                # print("this is the rounded weight",rounded_weight)
                 # weight --> how many are possible to be at location
                 for _ in range(rounded_weight):
                     self.state_estimates.append(self.updated_positions[i])
@@ -533,8 +533,8 @@ class mtt_phd:
             history.append(estimates)
 
             self.previous_positions = self.updated_positions
-            self.previous_covariance = self.updated_covariance
-            print("this is the previous_covariance", self.previous_covariance)
+            self.previous_covariances = self.updated_covariance
+            print("time", time)
             self.previous_weights = self.updated_weights
 
         return history
