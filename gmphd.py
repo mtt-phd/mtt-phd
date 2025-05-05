@@ -162,6 +162,7 @@ class mtt_phd:
         self.predicted_weights.append(self.new_birth_weight)
         self.predicted_positions.append(new_birth_position)
         self.predicted_covariance.append(new_birth_covariance)
+
     
     """
     step 2
@@ -390,6 +391,7 @@ class mtt_phd:
     maximum allowed gaussians: number of steps (total targets in the overall target)
     """
     def prune_alg(self): 
+
         l = 0
         maximum_gaussians = self.num_steps
 
