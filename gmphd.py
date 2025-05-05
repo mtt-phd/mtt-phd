@@ -70,8 +70,8 @@ class mtt_phd:
     H = measurement_matrix
     R = measurement_noise_covariance
     """
-    """                   w          m      P           J              z               F                         Q            num steps       H                 R                   det_prob             clutter_rate,   threshold_weight,    merging_threshold, truncation_threshold  """
-    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability, clutter_intensity,  threshold_weight, merging_threshold, truncation_threshold):
+    """                   w          m      P           J              z               F                         Q            num steps       H                 R                   det_prob             clutter_rate,   threshold_weight,    merging_threshold, truncation_threshold   new_birth_weight"""
+    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability, clutter_intensity,  threshold_weight, merging_threshold, truncation_threshold, new_birth_weight):
         # birth data
         self.birth_weights = weights # w
         self.birth_position = position # m
@@ -87,6 +87,8 @@ class mtt_phd:
         self.threshold_weight = threshold_weight
         self.merging_threshold = merging_threshold
         self.truncation_threshold = truncation_threshold # make sure squared
+
+        self.new_birth_weight = new_birth_weight  # a moderate weight
 
         # how many births are defined in the model,
         # each birth is considered as a hypothesis about where the target may be
@@ -154,11 +156,10 @@ class mtt_phd:
             # need if beyond the first time-step
         
         # Dynamic birth
-        new_birth_weight = 0.1  # a moderate weight
         new_birth_position = np.array([np.random.uniform(-30, 30), np.random.uniform(-30, 30), 0, 0])
         new_birth_covariance = np.diag([25, 25, 4, 4])  # moderate uncertainty
 
-        self.predicted_weights.append(new_birth_weight)
+        self.predicted_weights.append(self.new_birth_weight)
         self.predicted_positions.append(new_birth_position)
         self.predicted_covariance.append(new_birth_covariance)
     
