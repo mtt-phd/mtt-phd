@@ -115,6 +115,44 @@ def simulate_motion(F:np.ndarray, Q:np.ndarray, num_steps:int = 10, init_truths:
 
     return all_states
 
+def simulate_motion_basic(F:np.ndarray, Q:np.ndarray, num_steps:int=10, init_truths:int=3)->dict[int, list[np.ndarray]]:
+    """Simulates simple motion of multiple objects in an n-dimensional space.
+
+    Args:
+        F (np.ndarray): State transition matrix. Must match the dimensions of the state vector.
+        Q (np.ndarray): Process noise covariance matrix. Must match the dimensions of the state vector.
+        num_steps (int, optional): Number of timesteps to simulate. Defaults to 10.
+        init_truths (int, optional): Number of initial objects. Defaults to 3.
+
+    Returns:  
+        dict[int, list[np.ndarray]]: Dictionary containing the states of each object at each timestep. Each key is the object index (0, 1, 2, ...). Each value is a list of state vectors with shape (4,) representing (x, y, dx, dy). 
+    """
+    all_states = {}
+    # initial truths
+    for i in range(init_truths):
+        state = np.array([
+            # initial position (x, y) ~ U(-30, 30) x U(-30, 30)
+            *np.random.uniform(-30, 30, 2),
+            # initial velocity (dx, dy) ~ U(-2, 2) x U(-2, 2)
+            *np.random.uniform(-2, 2, 2),
+        ])
+
+        all_states[i] = [state.copy()]
+
+    for step in range(1, num_steps + 1):
+        
+        # propagate state for each object
+        for i in all_states.keys():
+            # get previous state
+            state = all_states[i][-1]
+
+            # propagate state with noise
+            new_state = F @ state + np.random.multivariate_normal(np.zeros(Q[0].size), Q)
+            
+            all_states[i].append(new_state.copy())
+
+    return all_states
+
 def simulate_measurement(ground_truths:dict[int, list[np.ndarray]], H:np.ndarray, R:np.ndarray, num_steps:int=10, det_prob:float=0.9, clutter_rate:float=3.0, area:tuple[float, float]=(-100,100))->dict[int, list[tuple[int, np.ndarray]]]:
     """Simulates the measurement process for multiple objects in an n-dimensional space.
 
