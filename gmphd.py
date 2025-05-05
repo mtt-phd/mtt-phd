@@ -154,7 +154,7 @@ class mtt_phd:
             # need if beyond the first time-step
         
         # Dynamic birth
-        new_birth_weight = 0.3  # a moderate weight
+        new_birth_weight = 0.1  # a moderate weight
         new_birth_position = np.array([np.random.uniform(-30, 30), np.random.uniform(-30, 30), 0, 0])
         new_birth_covariance = np.diag([25, 25, 4, 4])  # moderate uncertainty
 
