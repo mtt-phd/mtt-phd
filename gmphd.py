@@ -156,12 +156,12 @@ class mtt_phd:
             # need if beyond the first time-step
         
         # Dynamic birth
-        new_birth_position = np.array([np.random.uniform(-30, 30), np.random.uniform(-30, 30), 0, 0])
-        new_birth_covariance = np.diag([25, 25, 4, 4])  # moderate uncertainty
+        new_birth_position = np.array([*np.random.uniform(-30, 30, 2), 0, 0])
+        new_birth_covariance = np.diag([1000, 1000, 2, 2])  # moderate uncertainty
 
         self.predicted_weights.append(self.new_birth_weight)
         self.predicted_positions.append(new_birth_position)
-        self.predicted_covariance.append(new_birth_covariance)
+        self.predicted_covariance.append(new_birth_covariance**2)
 
     
     """
@@ -304,72 +304,73 @@ class mtt_phd:
 
     """
     def update(self): 
-         # print("this is the predicted weights in update step", self.predicted_weights)
-         updated_weights = []
-         updated_positions = []
-         updated_covariances = []
+            # print("this is the predicted weights in update step", self.predicted_weights)
+            updated_weights = []
+            updated_positions = []
+            updated_covariances = []
 
-         all_weights = self.predicted_weights + self.surviving_weights
-         all_positions = self.predicted_positions + self.surviving_positions
-         all_covariances = self.predicted_covariance + self.surviving_covariances
+            all_weights = self.predicted_weights + self.surviving_weights
+            all_positions = self.predicted_positions + self.surviving_positions
+            all_covariances = self.predicted_covariance + self.surviving_covariances
 
-         # adds in missing detections 
-         for j in range(len(all_weights)): 
-             weights_missed = (1 - self.detection_probability) * all_weights[j]
-             updated_weights.append(weights_missed)
-            #  print("i am in the update step with updated weights",updated_weights)
-             updated_positions.append(all_positions[j])
-             updated_covariances.append(all_covariances[j])
-         
-         l = 0
-        # measurement update --> looks at the intial measurements
-         for z in self.current_measurements:
-            l = 0
-            likelihoods = []
-
-            # compute the likelihood (Gaussian/ normal) that the measurement comes from the predicted target
+            # adds in missing detections 
             for j in range(len(all_weights)): 
-                l+=1
-                # determines difference between actual measurement and calculated measurement
-                residual = z - self.predicted_calc_measurement[j]
-                updated_covariance = self.innovation_covariance[j]
+                weights_missed = (1 - self.detection_probability) * all_weights[j]
+                updated_weights.append(weights_missed)
+                #  print("i am in the update step with updated weights",updated_weights)
+                updated_positions.append(all_positions[j])
+                updated_covariances.append(all_covariances[j])
+            
+            l = 0
+            # measurement update --> looks at the intial measurements
+            for z in self.current_measurements:
+                l = 0
+                likelihoods = []
 
-                # evaluates if it is part of target
-                likelihood = self.gaussian_likelihood(residual, updated_covariance)
-                likelihoods.append(likelihood)
+                # compute the likelihood (Gaussian/ normal) that the measurement comes from the predicted target
+                for j in range(len(all_weights)): 
 
+                    l+=1
+                    # determines difference between actual measurement and calculated measurement
+                    residual = z - self.predicted_calc_measurement[j]
+                    updated_covariance = self.innovation_covariance[j]
 
-            # accounting for true targets and false targets that exist in the clutter
-            survivng_rate_weights = [all_weights[w] * likelihoods[w] for w in range(len(all_weights))]
-            sum_surviving_rate_weights = sum(survivng_rate_weights)
-            #*** kappa --> accounts for all possible explanations of z***
-            kappa = self.clutter_intensity + sum_surviving_rate_weights
+                    # evaluates if it is part of target
+                    likelihood = self.gaussian_likelihood(residual, updated_covariance)
+                    likelihoods.append(likelihood)
 
-            # update each predicted component
-            for j in range(len(all_weights)):
-                residual = z - self.predicted_calc_measurement[j]
-                kalman = self.kalman_gain[j]
-                position_updated = all_positions[j] + kalman @ residual
-                covariance_updated = self.posterior_covariance[j]
+                # accounting for true targets and false targets that exist in the clutter
+                survivng_rate_weights = [all_weights[w] * likelihoods[w] for w in range(len(all_weights))]
+                sum_surviving_rate_weights = sum(survivng_rate_weights)
+                #*** kappa --> accounts for all possible explanations of z***
+                kappa = self.clutter_intensity + sum_surviving_rate_weights
 
-                likelihood = likelihoods[j]
+                # update each predicted component
+                for j in range(len(all_weights)):
+                    residual = z - self.predicted_calc_measurement[j]
+                    kalman = self.kalman_gain[j]
+                    position_updated = all_positions[j] + kalman @ residual
+                    covariance_updated = self.posterior_covariance[j]
 
-                """KEY LINE OF ALGORITHM:
-                    Bayes rule for updating the weight of gaussian component given measurement
-                    detection probability: probability that a true target is detected
-                    surviving weights: prior weight of Gaussian component before considering measurement
-                    likelihood: likelihood measurement is true
-                    kappa: normalization term --> accounts for all possible explanations (clutter + contributions from all targets)
-                """
-                weight = (self.detection_probability * all_weights[j]* likelihood) / kappa
+                    likelihood = likelihoods[j]
 
-                updated_weights.append(weight)
-                updated_positions.append(position_updated)
-                updated_covariances.append(covariance_updated)
-                
-         self.updated_weights = updated_weights
-         self.updated_positions = updated_positions
-         self.updated_covariance = updated_covariances
+                    """KEY LINE OF ALGORITHM:
+                        Bayes rule for updating the weight of gaussian component given measurement
+                        detection probability: probability that a true target is detected
+                        surviving weights: prior weight of Gaussian component before considering measurement
+                        likelihood: likelihood measurement is true
+                        kappa: normalization term --> accounts for all possible explanations (clutter + contributions from all targets)
+                    """
+                    weight = (self.detection_probability * all_weights[j]* likelihood) / kappa
+
+                    updated_weights.append(weight)
+                    updated_positions.append(position_updated)
+                    updated_covariances.append(covariance_updated)
+
+                    
+            self.updated_weights = updated_weights
+            self.updated_positions = updated_positions
+            self.updated_covariance = updated_covariances
 
     
     """
