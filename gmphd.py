@@ -148,10 +148,19 @@ class mtt_phd:
         
         # print("predicted covariance", self.predicted_covariance)
         
-        # excluded the second for loop b/c no spawning 
+        #  second for loop b/c spawning 
             # e.g, where spawning appropriate = if randomly have things coming into play (e.g., missle launches from boats)
             # e.g. without spawning == people walking on street
+            # need if beyond the first time-step
+        
+        # Dynamic birth
+        new_birth_weight = 0.3  # a moderate weight
+        new_birth_position = np.array([np.random.uniform(-30, 30), np.random.uniform(-30, 30), 0, 0])
+        new_birth_covariance = np.diag([25, 25, 4, 4])  # moderate uncertainty
 
+        self.predicted_weights.append(new_birth_weight)
+        self.predicted_positions.append(new_birth_position)
+        self.predicted_covariance.append(new_birth_covariance)
     
     """
     step 2
