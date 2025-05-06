@@ -89,6 +89,7 @@ class mtt_phd:
         self.truncation_threshold = truncation_threshold # make sure squared
 
         self.new_birth_weight = new_birth_weight  # a moderate weight
+        self.new_birth_prob = 0.2
 
         # how many births are defined in the model,
         # each birth is considered as a hypothesis about where the target may be
@@ -156,12 +157,13 @@ class mtt_phd:
             # need if beyond the first time-step
         
         # Dynamic birth
-        new_birth_position = np.array([*np.random.uniform(-30, 30, 2), 0, 0])
-        new_birth_covariance = np.diag([1000, 1000, 2, 2])  # moderate uncertainty
+        if np.random.rand() < self.new_birth_prob:
+            new_birth_position = np.array([*np.random.uniform(-30, 30, 2), 0, 0])
+            new_birth_covariance = np.diag([1000, 1000, 2, 2])  # moderate uncertainty
 
-        self.predicted_weights.append(self.new_birth_weight)
-        self.predicted_positions.append(new_birth_position)
-        self.predicted_covariance.append(new_birth_covariance**2)
+            self.predicted_weights.append(self.new_birth_weight)
+            self.predicted_positions.append(new_birth_position)
+            self.predicted_covariance.append(new_birth_covariance)
 
     
     """
@@ -318,8 +320,8 @@ class mtt_phd:
                 weights_missed = (1 - self.detection_probability) * all_weights[j]
                 updated_weights.append(weights_missed)
                 #  print("i am in the update step with updated weights",updated_weights)
-                updated_positions.append(all_positions[j])
-                updated_covariances.append(all_covariances[j])
+                updated_positions.append(all_positions[j].copy())
+                updated_covariances.append(all_covariances[j].copy())
             
             l = 0
             # measurement update --> looks at the intial measurements
@@ -416,6 +418,7 @@ class mtt_phd:
 
         # all indices that need to be considered; set --> ensures each number is unique
         I = set(range(len(self.weights_total)))
+        print(f"I size: {len(I)}")
         total_merged_targets = 0
 
         while(I): 
@@ -521,10 +524,15 @@ class mtt_phd:
     def mtt_phd_whole(self):
         # lists algorithms order
         self.predict_birth()
+        print("birthed")
         self.predict_exist()
+        print("existing")
         self.phd_components_update()
+        print("prepared update")
         self.update()
+        print("updated")
         self.prune_alg()
+        print("pruned")
         return self.return_findings()
     
     """
@@ -537,13 +545,15 @@ class mtt_phd:
 
         history = []
         for time in range(self.num_steps):
+            print(f"t = {time}")
         #for time in range(1):
             self.current_measurements = [m[1] for m in self.simulated_measurements[time]]
            # print("this is the simulated measurements",self.simulated_measurements)
            # print("this is the current measurements", self.current_measurements)
             estimates = self.mtt_phd_whole()
             # print("this is the estimates", estimates)
-            history.append(estimates)
+            # history.append(estimates)
+            history = estimates
             self.previous_positions = self.updated_positions
             self.previous_covariances = self.updated_covariance
             # print("time", time)

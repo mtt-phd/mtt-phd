@@ -66,9 +66,9 @@ def simulate_motion(F:np.ndarray, Q:np.ndarray, num_steps:int = 10, init_truths:
     # initial truths
     for i in range(init_truths):
         state = np.array([
-            # initial position (x, y) ~ U(-30, 30) x U(-30, 30)
+            # initial position (x, y) ~ U(pos) x U(pos)
             *np.random.uniform(*pos_bounds, 2),
-            # initial velocity (dx, dy) ~ U(-2, 2) x U(-2, 2)
+            # initial velocity (dx, dy) ~ U(vel) x U(vel)
             *np.random.uniform(*vel_bounds, 2),
         ])
 
