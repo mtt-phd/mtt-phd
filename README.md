@@ -8,7 +8,7 @@ The PHD filter approximates the density by instead propagating its first order s
 
 The file [gmphd.py](gmphd.py) provides an implementation of the GM-PHD filter, adapted from the [original paper](https://ieeexplore.ieee.org/document/1710358) by Vo and Ma (2006).
 
-The file [gmphd.ipynb](gmphd.ipynb) provides a demonstration and explanation of the abstracted class on synthetic multi-object motion and measurement data.
+The file [gmphd.ipynb](gmphd.ipynb) provides a demonstration and explanation of the abstracted class on synthetic multi-object motion and measurement data. While the file [demo.ipynb](demo.ipynb) provides a demonstration excluding the written explanation.
 
 # Team
 - Amanda Nitta
