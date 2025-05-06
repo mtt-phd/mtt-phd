@@ -544,7 +544,7 @@ class mtt_phd:
             estimates = self.mtt_phd_whole()
             # print("this is the estimates", estimates)
             # history.append(estimates)
-            history = estimates
+            history.append(estimates)
             self.previous_positions = self.updated_positions
             self.previous_covariances = self.updated_covariance
             # print("time", time)
