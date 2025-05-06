@@ -157,7 +157,8 @@ class mtt_phd:
         
         # Dynamic birth
         new_birth_position = np.array([*np.random.uniform(-30, 30, 2), 0, 0])
-        new_birth_covariance = np.diag([1000, 1000, 2, 2])  # moderate uncertainty
+        new_birth_covariance = np.diag([90, 90, 2, 2])  # moderate uncertainty
+                                        # 75, 75
 
         self.predicted_weights.append(self.new_birth_weight)
         self.predicted_positions.append(new_birth_position)
@@ -192,6 +193,8 @@ class mtt_phd:
                     # survival position (addition of d is excluded b/c d = 0 (if used in step 1); predicting the position and not spawning)
                     surviving_position = self.state_transition_matrix @ self.previous_positions[j]
                     self.surviving_positions.append(surviving_position)
+                    print(f"Prev pos: {self.previous_positions[j][:2]}, New pos: {surviving_position[:2]}")
+
 
                     # survival covariance
                     surviving_covariance = (self.state_transition_matrix @ self.previous_covariances[j] @ self.state_transition_matrix.T) + self.process_noise_matrix
@@ -544,7 +547,7 @@ class mtt_phd:
             estimates = self.mtt_phd_whole()
             # print("this is the estimates", estimates)
             # history.append(estimates)
-            history = estimates
+            history.append(estimates)
             self.previous_positions = self.updated_positions
             self.previous_covariances = self.updated_covariance
             # print("time", time)
