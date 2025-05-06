@@ -1,4 +1,4 @@
-# Multi Target Tracking: Probability Hypothesis Denisty
+# Multi Target Tracking: Probability Hypothesis Density
 
 This repository includes an explanation and implementation of the Gaussian Mixture Probability Hypothesis Density Filter (GM-PHD filter).
 
