@@ -180,6 +180,14 @@ class mtt_phd:
             # e.g, where spawning appropriate = if randomly have things coming into play (e.g., missle launches from boats)
             # e.g. without spawning == people walking on street
             # need if beyond the first time-step
+        """
+        PSEUDOCODE:
+            for j = 1, ... J_beta_k
+                for l = 1.... J_k-1
+                    i += 1
+                    w^(l)_k|k-1 = w^(l)_k-1 w^(k)_beta,k 
+                    m^(l)_k|k-1 = d^(j)_beta,k-1 + F_beta,k-1 m^(l)_k-1
+                    P^(l)_k|k-1 = Q^(j)_beta,k-1 + F^(j)_beta,k-1 P^(l)_k-1 (F^(j)_beta,k-1)^T
         
         # Dynamic birth
         new_birth_covariance = np.diag([90, 90, 2, 2])  # moderate uncertainty
