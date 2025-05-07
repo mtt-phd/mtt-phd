@@ -129,8 +129,8 @@ class mtt_phd:
         self.state_estimates = []
 
         self.spawn_weights = [
-            0.4,  # parent 0
-            0.5   # parent 1
+            0.5,  # parent 0
+            0.6   # parent 1
         ]
         self.spawn_positions = [
             np.array([100, 0, 100, 0]),
