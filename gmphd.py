@@ -188,6 +188,21 @@ class mtt_phd:
                     w^(l)_k|k-1 = w^(l)_k-1 w^(k)_beta,k 
                     m^(l)_k|k-1 = d^(j)_beta,k-1 + F_beta,k-1 m^(l)_k-1
                     P^(l)_k|k-1 = Q^(j)_beta,k-1 + F^(j)_beta,k-1 P^(l)_k-1 (F^(j)_beta,k-1)^T
+        """
+        if self.spawn_weights and self.previous_weights:
+            for j in range(len(self.spawn_weights)): 
+                for l in range(len(self.spawn_weights[j])): 
+
+                    self.incrementer += 1 
+                    weight_spawn = self.spawn_weights[j][l] * self.previous_weights[j]
+                    self.predicted_weights.append(weight_spawn)
+
+                    position_spawn = self.spawn_displacements[j][l] + self.spawn_transition_matrices[j][l] @ self.previous_positions[j]
+                    self.predicted_positions.append(position_spawn)
+
+                    covariance_spawn = self.spawn_process_noise[j][l] + self.spawn_transition_matrices[j][l] @ self.previous_covariances[j] @ self.spawn_transition_matrices[j][l].T
+                    self.predicted_covariance.append(covariance_spawn)
+
         
         # Dynamic birth
         # new_birth_position = np.array([*np.random.uniform(-30, 30, 2), 0, 0])
