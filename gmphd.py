@@ -128,6 +128,32 @@ class mtt_phd:
 
         self.state_estimates = []
 
+        self.spawn_weights = [
+            [0.6],  # parent 0
+            [0.5]   # parent 1
+        ]
+        self.spawn_positions = [
+            [np.array([100, 0, 100, 0])],
+            [np.array([200, 0, 200, 0])]
+        ]
+        self.spawn_displacements = [
+            [np.array([5, 0, 5, 0])],
+            [np.array([-5, 0, -5, 0])]
+        ]
+        self.spawn_covariances = [
+            [np.eye(4) * 10],
+            [np.eye(4) * 10]
+        ]
+        self.spawn_transition_matrices = [
+            [np.eye(4)],
+            [np.eye(4)]
+        ]
+        self.spawn_process_noise = [
+            [np.eye(4)],
+            [np.eye(4)]
+        ]
+
+
     
     """
     step 1
