@@ -190,17 +190,17 @@ class mtt_phd:
                     P^(l)_k|k-1 = Q^(j)_beta,k-1 + F^(j)_beta,k-1 P^(l)_k-1 (F^(j)_beta,k-1)^T
         """
         if self.spawn_weights and self.previous_weights:
-            for j in range(len(self.spawn_weights)): 
-                for l in range(len(self.spawn_weights[j])): 
+            for j in range(len(self.previous_weights)): 
+                for l in range(len(self.spawn_weights)): 
 
                     self.incrementer += 1 
-                    weight_spawn = self.spawn_weights[j][l] * self.previous_weights[j]
+                    weight_spawn = self.spawn_weights[l] * self.previous_weights[j]
                     self.predicted_weights.append(weight_spawn)
 
-                    position_spawn = self.spawn_displacements[j][l] + self.spawn_transition_matrices[j][l] @ self.previous_positions[j]
+                    position_spawn = self.spawn_displacements[l] + self.spawn_transition_matrices[l] @ self.previous_positions[j]
                     self.predicted_positions.append(position_spawn)
 
-                    covariance_spawn = self.spawn_process_noise[j][l] + self.spawn_transition_matrices[j][l] @ self.previous_covariances[j] @ self.spawn_transition_matrices[j][l].T
+                    covariance_spawn = self.spawn_process_noise[l] + self.spawn_transition_matrices[l] @ self.previous_covariances[j] @ self.spawn_transition_matrices[l].T
                     self.predicted_covariance.append(covariance_spawn)
 
         
