@@ -203,6 +203,11 @@ class mtt_phd:
                     covariance_spawn = self.spawn_process_noise[l] + self.spawn_transition_matrices[l] @ self.previous_covariances[j] @ self.spawn_transition_matrices[l].T
                     self.predicted_covariance.append(covariance_spawn)
 
+        """
+        Spawning ==> better if randomly see something happening based on something else
+        Dynamic birth ==> when just happens randomly
+        """
+
         
         # Dynamic birth
         # new_birth_position = np.array([*np.random.uniform(-30, 30, 2), 0, 0])
