@@ -190,8 +190,9 @@ class mtt_phd:
                     P^(l)_k|k-1 = Q^(j)_beta,k-1 + F^(j)_beta,k-1 P^(l)_k-1 (F^(j)_beta,k-1)^T
         
         # Dynamic birth
-        new_birth_covariance = np.diag([90, 90, 2, 2])  # moderate uncertainty
-                                        # 75, 75
+        # new_birth_position = np.array([*np.random.uniform(-30, 30, 2), 0, 0])
+        # new_birth_covariance = np.diag([90, 90, 2, 2])  # moderate uncertainty
+        #                                 # 75, 75
 
         # self.predicted_weights.append(self.new_birth_weight)
         # self.predicted_positions.append(new_birth_position)
