@@ -104,8 +104,8 @@ def simulate_motion(F:np.ndarray, Q:np.ndarray, num_steps:int = 10, init_truths:
         # birth
         if np.random.rand() <= birth_prob:
             state = np.array([
-                *np.random.uniform(-30, 30, 2),
-                *np.random.uniform(-2, 2, 2),
+                *np.random.uniform(*pos_bounds, 2),
+                *np.random.uniform(*vel_bounds, 2),
             ])
             # since we are adding a new object, we need to set its state to None for all previous timesteps
             all_states[next_id] = [None] * step + [state.copy()]

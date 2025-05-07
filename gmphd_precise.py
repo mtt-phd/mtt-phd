@@ -55,7 +55,7 @@ H = measurement matrix
 
 class mtt_phd:
     
-    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability, clutter_intensity,  threshold_weight, merging_threshold, truncation_threshold, new_birth_weight):
+    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability, clutter_intensity,  threshold_weight, merging_threshold, truncation_threshold, new_birth_weight, survival_prob, max_components):
         # birth data
         self.birth_weights = weights # w
         self.birth_position = position # m
@@ -64,9 +64,10 @@ class mtt_phd:
         self.Z = measurement # z 
         self.F = state_transition_matrix 
         self.Q = process_noise_matrix
-        self.num_steps = num_steps
         self.H = measurement_matrix
         self.R = measurement_noise 
+        self.num_steps = num_steps
+
         # minimum weight needed to extract values
         self.threshold_weight = threshold_weight
         self.U = merging_threshold
@@ -76,7 +77,7 @@ class mtt_phd:
         self.kappa = clutter_intensity
 
         self.new_birth_weight = new_birth_weight  # a moderate weight
-        self.new_birth_prob = 0.5
+        self.new_birth_prob = 0.25
 
         self.w_pred = []
         self.m_pred = []
@@ -90,29 +91,29 @@ class mtt_phd:
         self.m_k = []
         self.P_k = []
 
-        self.p_S = 0.995
+        self.p_S = survival_prob
+        self.J_max = max_components
 
     def predict_birth(self, step):
-        # if step == 0:
-        for j in range(len(self.birth_weights)):
-            w = self.birth_weights[j]
-            m = self.birth_position[j]
-            P = self.birth_conv_matrix[j]
+        # add initial birth prediction components
+        if step == 0:
+            for j in range(len(self.birth_weights)):
+                w = self.birth_weights[j]
+                m = self.birth_position[j]
+                P = self.birth_conv_matrix[j]
 
-            self.w_pred.append(w)
-            self.m_pred.append(m)
-            self.P_pred.append(P)
+                self.w_pred.append(w)
+                self.m_pred.append(m)
+                self.P_pred.append(P)
         
         # Dynamic birth
         if np.random.rand() < self.new_birth_prob:
             # Add new birth
-            avg_velocity_x = np.mean([m[2] for m in self.m_prev])  # Assuming m[2] is velocity_x
-            avg_velocity_y = np.mean([m[3] for m in self.m_prev])  # Assuming m[3] is velocity_y
                 
             new_weight = self.new_birth_weight
             # new_birth_position = np.array([*np.random.uniform(-50, 50, 2), avg_velocity_x, avg_velocity_y])
             new_birth_position = np.array([0] * 4)
-            new_birth_covariance = np.diag([1000, 1000, 2, 2])  # moderate uncertainty
+            new_birth_covariance = np.diag([1000, 1000, 2, 2])
 
             self.w_pred.append(new_weight)
             self.m_pred.append(new_birth_position)
@@ -170,11 +171,8 @@ class mtt_phd:
                 self.w_k.append(w_k)
                 self.m_k.append(m_k)
                 self.P_k.append(P_k)
-            # print(f"J_k|k-1: {len(self.w_pred)}")
         
             temp = l * len(self.w_pred)
-            # print(f"l * J_k|k-1: {temp}")
-            # print(temp)
             for j in range(len(self.w_pred)):
                 idx = temp + j
                 new_wk = self.w_k[idx] / (self.kappa + sum(self.w_k[temp:]))
@@ -183,7 +181,6 @@ class mtt_phd:
 
     def prune(self):
         l = 0
-        J_max = self.num_steps
         indices = [i for i in range(len(self.w_k)) if self.w_k[i] > self.Trunc]
         I = set(indices)
 
@@ -215,7 +212,7 @@ class mtt_phd:
         merged_m = np.array(merged_m)
         merged_P = np.array(merged_P)
         
-        if l > J_max:
+        if l > self.J_max:
             indices = np.argsort(merged_w)[::-1]
             merged_w = merged_w[indices]
             merged_m = merged_m[indices]
@@ -236,8 +233,9 @@ class mtt_phd:
         return extracted_states
 
     def run(self):
-        history = []
+        history = {}
         for step in range(self.num_steps):
+            measurements = [z[1] for z in self.Z[step]]
 
             self.w_pred = []
             self.m_pred = []
@@ -249,10 +247,11 @@ class mtt_phd:
             self.predict_birth(step)
             self.predict_exist()
             self.construct_components()
-            self.update([z[1] for z in self.Z[step]])
+            self.update(measurements)
             self.prune()
             states = self.extract()
-            history.append(states)
+
+            history[step] = states
 
             self.w_prev = self.w_k.copy()
             self.m_prev = self.m_k.copy()
