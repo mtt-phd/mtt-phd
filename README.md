@@ -10,6 +10,8 @@ The file [gmphd.py](gmphd.py) provides an implementation of the GM-PHD filter, a
 
 The file [gmphd.ipynb](gmphd.ipynb) provides a demonstration and explanation of the abstracted class on synthetic multi-object motion and measurement data. While the file [demo.ipynb](demo.ipynb) provides a demonstration excluding the written explanation.
 
+THe file [gmphd_precise.py](gmphd_precise.py) provides a more precise adaptation of the GM-PHD filter, using the variable names from the paper. The file [demo_precise.ipynb](demo_precise.ipynb) is a demonstration that is more precise. 
+
 # Team
 - Amanda Nitta
 - Jayden Tactay
