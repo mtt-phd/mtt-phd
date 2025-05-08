@@ -111,7 +111,7 @@ class mtt_phd:
         self.surviving_weights = []
         self.surviving_covariances = []
         self.prob_survival = 0.99
-        self.survival_rate = 0
+        self.survival_rate = 0.99
 
         self.detection_probability = detection_probability
         self.clutter_intensity = clutter_intensity
