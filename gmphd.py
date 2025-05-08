@@ -209,14 +209,25 @@ class mtt_phd:
         """
 
         
-        # Dynamic birth
-        new_birth_position = np.array([*np.random.uniform(-30, 30, 2), 0, 0])
-        new_birth_covariance = np.diag([90, 90, 2, 2])  # moderate uncertainty
-                                        # 75, 75
+        # # Dynamic birth
+        # new_birth_position = np.array([*np.random.uniform(-30, 30, 2), 0, 0])
+        # new_birth_covariance = np.diag([300, 300, 2, 2])  # moderate uncertainty
+        #                                 # 75, 75
 
-        self.predicted_weights.append(self.new_birth_weight)
-        self.predicted_positions.append(new_birth_position)
-        self.predicted_covariance.append(new_birth_covariance**2)
+        # self.predicted_weights.append(self.new_birth_weight)
+        # self.predicted_positions.append(new_birth_position)
+        # self.predicted_covariance.append(new_birth_covariance**2)
+
+        if np.random.rand() < self.new_birth_prob:
+            # Add new birth
+                
+            new_weight = self.new_birth_weight
+            new_birth_position = np.array([0] * 4)
+            new_birth_covariance = np.diag([75, 75, 2, 2])
+
+            self.predicted_weights.append(new_weight)
+            self.predicted_positions.append(new_birth_position)
+            self.predicted_covariance.append(new_birth_covariance)
             
 
     
