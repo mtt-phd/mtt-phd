@@ -153,6 +153,8 @@ class mtt_phd:
             np.eye(4)
         ]
 
+        self.new_birth_prob = 0.25 
+
         self.spawning_var = spawning
 
     
@@ -220,12 +222,12 @@ class mtt_phd:
         # self.predicted_positions.append(new_birth_position)
         # self.predicted_covariance.append(new_birth_covariance**2)
 
+
         if np.random.rand() < self.new_birth_prob:
             # Add new birth
-                
             new_weight = self.new_birth_weight
             new_birth_position = np.array([0] * 4)
-            new_birth_covariance = np.diag([50, 50, 2, 2])
+            new_birth_covariance = np.diag([1000, 1000, 2, 2])
 
             self.predicted_weights.append(new_weight)
             self.predicted_positions.append(new_birth_position)
