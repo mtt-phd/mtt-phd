@@ -129,8 +129,8 @@ class mtt_phd:
         self.state_estimates = []
 
         self.spawn_weights = [
-            0.5,  # parent 0
-            0.6   # parent 1
+            0.03,  # parent 0
+            0.04   # parent 1
         ]
         self.spawn_positions = [
             np.array([50, 50, 0, 0]),
@@ -209,7 +209,7 @@ class mtt_phd:
         """
 
         
-        # # Dynamic birth
+        """Dynamic Birth"""
         # new_birth_position = np.array([*np.random.uniform(-30, 30, 2), 0, 0])
         # new_birth_covariance = np.diag([300, 300, 2, 2])  # moderate uncertainty
         #                                 # 75, 75
@@ -223,7 +223,7 @@ class mtt_phd:
                 
             new_weight = self.new_birth_weight
             new_birth_position = np.array([0] * 4)
-            new_birth_covariance = np.diag([75, 75, 2, 2])
+            new_birth_covariance = np.diag([50, 50, 2, 2])
 
             self.predicted_weights.append(new_weight)
             self.predicted_positions.append(new_birth_position)
