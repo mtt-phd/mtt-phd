@@ -133,12 +133,12 @@ class mtt_phd:
             0.6   # parent 1
         ]
         self.spawn_positions = [
-            np.array([100, 0, 100, 0]),
-            np.array([200, 0, 200, 0])
+            np.array([50, 50, 0, 0]),
+            np.array([50, 50, 0, 0])
         ]
         self.spawn_displacements = [
-            np.array([5, 0, 5, 0]),
-            np.array([-5, 0, -5, 0])
+            np.array([5, 5, 0, 0]),
+            np.array([-5, -5, 0, 0])
         ]
         self.spawn_covariances = [
             np.eye(4) * 10,
