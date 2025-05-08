@@ -110,7 +110,7 @@ class mtt_phd:
         self.surviving_positions = []
         self.surviving_weights = []
         self.surviving_covariances = []
-        self.prob_survival = 0.99 
+        self.prob_survival = 0.99
         self.survival_rate = 0
 
         self.detection_probability = detection_probability
