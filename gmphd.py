@@ -111,7 +111,6 @@ class mtt_phd:
         self.surviving_weights = []
         self.surviving_covariances = []
         self.prob_survival = 0.99
-        self.survival_rate = 0.99
 
         self.detection_probability = detection_probability
         self.clutter_intensity = clutter_intensity
@@ -192,6 +191,7 @@ class mtt_phd:
                     m^(l)_k|k-1 = d^(j)_beta,k-1 + F_beta,k-1 m^(l)_k-1
                     P^(l)_k|k-1 = Q^(j)_beta,k-1 + F^(j)_beta,k-1 P^(l)_k-1 (F^(j)_beta,k-1)^T
         """
+        # spawning --> creates prediction relative to other predictions if appropriate
         if self.spawning_var:
             if self.spawn_weights and self.previous_weights:
                 for j in range(len(self.previous_weights)): 
@@ -222,7 +222,7 @@ class mtt_phd:
         # self.predicted_positions.append(new_birth_position)
         # self.predicted_covariance.append(new_birth_covariance**2)
 
-
+        # determines whether a dynamic birth is going to happen
         if np.random.rand() < self.new_birth_prob:
             # Add new birth
             new_weight = self.new_birth_weight
