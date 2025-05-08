@@ -70,8 +70,8 @@ class mtt_phd:
     H = measurement_matrix
     R = measurement_noise_covariance
     """
-    """                   w          m      P           J              z               F                         Q            num steps       H                 R                   det_prob             clutter_rate,   threshold_weight,    merging_threshold, truncation_threshold   new_birth_weight"""
-    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability, clutter_intensity,  threshold_weight, merging_threshold, truncation_threshold, new_birth_weight):
+    """                   w          m      P           J              z               F                         Q            num steps       H                 R                   det_prob             clutter_rate,   threshold_weight,    merging_threshold, truncation_threshold   new_birth_weight, spawning"""
+    def __init__(self, weights, position, p_cov, num_components, measurement, state_transition_matrix, process_noise_matrix, num_steps, measurement_matrix, measurement_noise, detection_probability, clutter_intensity,  threshold_weight, merging_threshold, truncation_threshold, new_birth_weight, spawning):
         # birth data
         self.birth_weights = weights # w
         self.birth_position = position # m
@@ -153,6 +153,7 @@ class mtt_phd:
             np.eye(4)
         ]
 
+        self.spawning_var = spawning
 
     
     """
@@ -189,19 +190,20 @@ class mtt_phd:
                     m^(l)_k|k-1 = d^(j)_beta,k-1 + F_beta,k-1 m^(l)_k-1
                     P^(l)_k|k-1 = Q^(j)_beta,k-1 + F^(j)_beta,k-1 P^(l)_k-1 (F^(j)_beta,k-1)^T
         """
-        if self.spawn_weights and self.previous_weights:
-            for j in range(len(self.previous_weights)): 
-                for l in range(len(self.spawn_weights)): 
+        if self.spawning_var:
+            if self.spawn_weights and self.previous_weights:
+                for j in range(len(self.previous_weights)): 
+                    for l in range(len(self.spawn_weights)): 
 
-                    self.incrementer += 1 
-                    weight_spawn = self.spawn_weights[l] * self.previous_weights[j]
-                    self.predicted_weights.append(weight_spawn)
+                        self.incrementer += 1 
+                        weight_spawn = self.spawn_weights[l] * self.previous_weights[j]
+                        self.predicted_weights.append(weight_spawn)
 
-                    position_spawn = self.spawn_displacements[l] + self.spawn_transition_matrices[l] @ self.previous_positions[j]
-                    self.predicted_positions.append(position_spawn)
+                        position_spawn = self.spawn_displacements[l] + self.spawn_transition_matrices[l] @ self.previous_positions[j]
+                        self.predicted_positions.append(position_spawn)
 
-                    covariance_spawn = self.spawn_process_noise[l] + self.spawn_transition_matrices[l] @ self.previous_covariances[j] @ self.spawn_transition_matrices[l].T
-                    self.predicted_covariance.append(covariance_spawn)
+                        covariance_spawn = self.spawn_process_noise[l] + self.spawn_transition_matrices[l] @ self.previous_covariances[j] @ self.spawn_transition_matrices[l].T
+                        self.predicted_covariance.append(covariance_spawn)
 
         """
         Spawning ==> better if randomly see something happening based on something else
