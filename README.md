@@ -10,7 +10,7 @@ The PHD filter approximates the density by instead propagating its first order s
 
 [gmphd.ipynb](gmphd.ipynb) provides a demonstration and explanation of the abstracted class on synthetic multi-object motion and measurement data. [demo.ipynb](demo.ipynb) provides a demonstration excluding the written explanation.
 
-[gmphd_precise.py](gmphd_precise.py) is a more direct adaptation of the filter, using the variable names from the paper. [demo_precise.ipynb](demo_precise.ipynb) demonstrates this version of the filter. Similar to [demo.ipynb](demo.ipynb), it omits the detailed explanation.
+[gmphd_precise.py](gmphd_precise.py) is a copy of [gmphd.py](gmphd.py) using the variable names from the paper. [demo_precise.ipynb](demo_precise.ipynb) demonstrates this version of the filter. Similar to [demo.ipynb](demo.ipynb), it omits the detailed explanation.
 
 [utils.py](utils.py) contains utility functions for filter demonstration, including matrix formation and motion/measurement data generation.
 
