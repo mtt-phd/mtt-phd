@@ -6,11 +6,11 @@ The PHD filter is an approximation of the multi-object Bayes filter for multi-ta
 
 The PHD filter approximates the density by instead propagating its first order statistical moment (mean), referred to as the prosterior intensity. This intensity represents the expected number of objects in some region of the state space, capturing target density without the need to determine individual densities. The Gaussian Mixture PHD (GM-PHD) filter is an implementation of the PHD filter that assumes linear Gaussian models for motion and measurement.
 
-The file [gmphd.py](gmphd.py) provides an implementation of the GM-PHD filter, adapted from the [original paper](https://ieeexplore.ieee.org/document/1710358) by Vo and Ma (2006).
+[gmphd.py](gmphd.py) provides an implementation of the GM-PHD filter, adapted from the [original paper](https://ieeexplore.ieee.org/document/1710358) by Vo and Ma (2006).
 
-The file [gmphd.ipynb](gmphd.ipynb) provides a demonstration and explanation of the abstracted class on synthetic multi-object motion and measurement data. While the file [demo.ipynb](demo.ipynb) provides a demonstration excluding the written explanation.
+[gmphd.ipynb](gmphd.ipynb) provides a demonstration and explanation of the abstracted class on synthetic multi-object motion and measurement data. [demo.ipynb](demo.ipynb) provides a demonstration excluding the written explanation.
 
-The file [gmphd_precise.py](gmphd_precise.py) is a copy of the gmhd filter above using the variable names from the paper and provides a more precise adaptation. The file [demo_precise.ipynb](demo_precise.ipynb) is its demonstration.
+[gmphd_precise.py](gmphd_precise.py) is a more direct adaptation of the filter, using the variable names from the paper. [demo_precise.ipynb](demo_precise.ipynb) demonstrates this version of the filter. Similar to [demo.ipynb](demo.ipynb), it omits the detailed explanation.
 
 # Team
 - Amanda Nitta
